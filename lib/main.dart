@@ -1,4 +1,6 @@
 import 'package:auth/firebase_options.dart';
+import 'package:auth/pages/otp.dart';
+import 'package:auth/pages/phone.dart';
 import 'package:auth/pages/signin.dart';
 import 'package:auth/pages/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,10 +15,13 @@ void main() async{
   );
   runApp(MaterialApp(
     home:Home(),
+    initialRoute: 'signup_page',
     routes: {
       'listofauth':(context)=>ListOfAuth(),
       'signup_page': (context)=>SignupPage(),
-      'signin':(context)=>SignIn()
+      'signin':(context)=>SignIn(),
+      'phone':(context)=>Phone(),
+      'otp':(context) =>Otp()
     },
   ));
 }
