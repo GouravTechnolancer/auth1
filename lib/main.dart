@@ -1,4 +1,5 @@
 import 'package:auth/firebase_options.dart';
+import 'package:auth/pages/home.dart';
 import 'package:auth/pages/otp.dart';
 import 'package:auth/pages/phone.dart';
 import 'package:auth/pages/signin.dart';
@@ -14,29 +15,28 @@ void main() async{
     options:DefaultFirebaseOptions.currentPlatform
   );
   runApp(MaterialApp(
-    home:Home(),
-    initialRoute: 'signup_page',
+    home:Splash(),
     routes: {
       'listofauth':(context)=>ListOfAuth(),
       'signup_page': (context)=>SignupPage(),
       'signin':(context)=>SignIn(),
       'phone':(context)=>Phone(),
-      'otp':(context) =>Otp()
+      'otp':(context) =>Otp(),
+      'home':(context)=>Home()
     },
   ));
 }
-class Home extends StatefulWidget {
-
+class Splash extends StatefulWidget {
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Splash> createState() => _SplashState();
 }
 
-class _HomeState extends State<Home> {
+class _SplashState extends State<Splash> {
 
   void Navto()async{
     Future.delayed(Duration(seconds: 3),(){
-      Navigator.pushNamed(context, 'listofauth');
+      Navigator.pushReplacementNamed(context, 'listofauth');
     });
 
   }

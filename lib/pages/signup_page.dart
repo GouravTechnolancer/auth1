@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+
+import '../Model/emp.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -8,11 +13,10 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey =GlobalKey<FormState>();
-  String email = '';
-  String password = '';
-  String name = '';
+  Emp employee = Emp();
   @override
   Widget build(BuildContext context) {
+    ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       appBar: AppBar(
         title: Text('SignUp'),
@@ -31,9 +35,7 @@ class _SignupPageState extends State<SignupPage> {
                     label: Text('Name')
                   ),
                   onChanged: (value){
-                   setState(() {
-                     name=value;
-                   });
+                   employee.name=value;
                   },
                   validator: (value){
                     if(value!.isEmpty){
@@ -51,9 +53,7 @@ class _SignupPageState extends State<SignupPage> {
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value){
-                    setState(() {
-                      email=value;
-                    });
+                      employee.email=value;
                   },
                   validator: (value){
                     if(value!.isEmpty){
@@ -72,9 +72,7 @@ class _SignupPageState extends State<SignupPage> {
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value){
-                    setState(() {
-                      password=value;
-                    });
+                      employee.password=value;
                   },
                   validator: (value){
                     if(value!.isEmpty){
@@ -94,12 +92,17 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 SizedBox(height: 20,),
                 ElevatedButton(
-                    onPressed: (){
+                    onPressed: ()async{
                       if(_formKey.currentState!.validate())
                         {
-                            FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                email: email,
-                                password: password).then((value) => {
+                          pd.show(msg: "please wait ",backgroundColor: Colors.green.shade600, );
+                            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                email: employee.email!,
+                                password: employee.password!).then((value)async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                   await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
+                                   pd.close();
+                                   Navigator.pushNamed(context, "home");
 
                             });
                         }

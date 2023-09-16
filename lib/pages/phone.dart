@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Phone extends StatefulWidget {
+  static String verify="";
+
   const Phone({super.key});
 
   @override
@@ -9,7 +12,7 @@ class Phone extends StatefulWidget {
 
 class _PhoneState extends State<Phone> {
   TextEditingController countryCode =TextEditingController();
-
+  var phone = "";
   @override
   void initState() {
     countryCode.text="+91";
@@ -47,6 +50,10 @@ class _PhoneState extends State<Phone> {
                   Text('|',style: TextStyle(fontSize: 35),),
                   Expanded(
                     child: TextField(
+                      keyboardType: TextInputType.phone,
+                      onChanged: (value){
+                        phone= value;
+                      },
                       decoration: InputDecoration(
                           border: InputBorder.none,
                         hintText: 'phone',
@@ -57,8 +64,18 @@ class _PhoneState extends State<Phone> {
               ),
             ),
 
-            ElevatedButton(onPressed: (){
-              Navigator.pushNamed(context, "otp");
+            ElevatedButton(onPressed: ()async {
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                phoneNumber: '${countryCode.text+phone}',
+                verificationCompleted: (PhoneAuthCredential credential) {},
+                verificationFailed: (FirebaseAuthException e) {},
+                codeSent: (String verificationId, int? resendToken) {
+                  Phone.verify = verificationId;
+                  Navigator.pushNamed(context, "otp");
+                },
+                codeAutoRetrievalTimeout: (String verificationId) {},
+              );
+
             },
                 child: Text('Send Code'),
               style: ElevatedButton.styleFrom(primary: Colors.green.shade600,shape: RoundedRectangleBorder(

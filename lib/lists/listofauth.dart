@@ -32,7 +32,7 @@ class _ListOfAuthState extends State<ListOfAuth> {
               Icon(Icons.phone,size: 45),
               OutlinedButton(
                   onPressed: (){
-                    print("not linked yet");
+                   Navigator.pushNamed(context, "phone");
                   },
                   child: Text('Phone Login'))
             ],
