@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Phone extends StatefulWidget {
+class SignInWithPhone extends StatefulWidget {
   static String verify="";
 
-  const Phone({super.key});
+  const SignInWithPhone({super.key});
 
   @override
-  State<Phone> createState() => _PhoneState();
+  State<SignInWithPhone> createState() => _SignInWithPhoneState();
 }
 
-class _PhoneState extends State<Phone> {
+class _SignInWithPhoneState extends State<SignInWithPhone> {
   TextEditingController countryCode =TextEditingController();
   var phone = "";
   @override
@@ -21,17 +21,17 @@ class _PhoneState extends State<Phone> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Phone '),),
+      appBar: AppBar(title: const Text('Phone '),),
       body: Container(
-        margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
+        margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Phone Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-            Text('We need to register your phone before getting started !'),
-            SizedBox(height: 25,),
+            const Text('Phone Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+            const Text('We need to register your phone before getting started !'),
+            const SizedBox(height: 25,),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey,width: 2),
                 borderRadius: BorderRadius.circular(10)
@@ -42,19 +42,19 @@ class _PhoneState extends State<Phone> {
                     width: 40,
                     child: TextField(
                       controller: countryCode,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none
                       ),
                     ),
                   ),
-                  Text('|',style: TextStyle(fontSize: 35),),
+                  const Text('|',style: TextStyle(fontSize: 35),),
                   Expanded(
                     child: TextField(
                       keyboardType: TextInputType.phone,
                       onChanged: (value){
                         phone= value;
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: InputBorder.none,
                         hintText: 'phone',
                       ),
@@ -66,21 +66,21 @@ class _PhoneState extends State<Phone> {
 
             ElevatedButton(onPressed: ()async {
               await FirebaseAuth.instance.verifyPhoneNumber(
-                phoneNumber: '${countryCode.text+phone}',
+                phoneNumber: countryCode.text+phone,
                 verificationCompleted: (PhoneAuthCredential credential) {},
                 verificationFailed: (FirebaseAuthException e) {},
                 codeSent: (String verificationId, int? resendToken) {
-                  Phone.verify = verificationId;
-                  Navigator.pushNamed(context, "otp");
+                  SignInWithPhone.verify = verificationId;
+                  Navigator.pushReplacementNamed(context, "otpVerification");
                 },
                 codeAutoRetrievalTimeout: (String verificationId) {},
               );
 
             },
-                child: Text('Send Code'),
-              style: ElevatedButton.styleFrom(primary: Colors.green.shade600,shape: RoundedRectangleBorder(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
               )),
+                child: const Text('Send Code'),
             )
 
           ],

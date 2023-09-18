@@ -1,13 +1,14 @@
 import 'package:auth/firebase_options.dart';
-import 'package:auth/pages/home.dart';
-import 'package:auth/pages/otp.dart';
-import 'package:auth/pages/phone.dart';
-import 'package:auth/pages/signin.dart';
-import 'package:auth/pages/signup_page.dart';
+import 'package:auth/UI/sign_in_with_google.dart';
+import 'package:auth/UI/home.dart';
+import 'package:auth/UI/otp_verification.dart';
+import 'package:auth/UI/sign_in_with_phone.dart';
+import 'package:auth/UI/sign_in_with_email.dart';
+import 'package:auth/UI/register_user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'lists/listofauth.dart';
+import 'UI/choose_auth_method.dart';
+import 'UI/profile.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,18 +16,23 @@ void main() async{
     options:DefaultFirebaseOptions.currentPlatform
   );
   runApp(MaterialApp(
-    home:Splash(),
+    home:const Splash(),
+    initialRoute: 'profile',
     routes: {
-      'listofauth':(context)=>ListOfAuth(),
-      'signup_page': (context)=>SignupPage(),
-      'signin':(context)=>SignIn(),
-      'phone':(context)=>Phone(),
-      'otp':(context) =>Otp(),
-      'home':(context)=>Home()
+      'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
+      'registerUser': (context)=> const RegisterUser(),
+      'signInWithEmail':(context)=>const SignInWithEmail(),
+      'signInWithPhone':(context)=>const SignInWithPhone(),
+      'otpVerification':(context) =>const OtpVerification(),
+      'home':(context)=> const Home(),
+      'signInWithGoogle':(context)=> const SignInWithGoogle(),
+      'profile':(context) =>Profile()
     },
   ));
 }
 class Splash extends StatefulWidget {
+  const Splash({super.key});
+
 
   @override
   State<Splash> createState() => _SplashState();
@@ -34,27 +40,26 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
 
-  void Navto()async{
-    Future.delayed(Duration(seconds: 3),(){
-      Navigator.pushReplacementNamed(context, 'listofauth');
+  void navigate()async{
+    Future.delayed(const Duration(seconds: 3),(){
+      Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
     });
 
   }
   @override
   void initState() {
     super.initState();
-    Navto();
+    navigate();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Authication'),
+        title: const Text('Authentication'),
       ),
       body:Center(
         child: CircularProgressIndicator (
           color: Colors.red[900],
-
         ),
       )
 

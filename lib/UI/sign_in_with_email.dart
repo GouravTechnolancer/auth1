@@ -1,45 +1,44 @@
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class SignInWithEmail extends StatefulWidget {
+  const SignInWithEmail({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignInWithEmail> createState() => _SignInWithEmailState();
 }
 
-class _SignInState extends State<SignIn> {
-  final _formKey = GlobalKey<FormState>();
+class _SignInWithEmailState extends State<SignInWithEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('SignIn '),),
+      appBar: AppBar(title: const Text('SignIn'),),
       body:Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Enter Your Email",
                 label: Text("Email"),
                 border: OutlineInputBorder()
               ),
 
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: "Enter Your Password",
                   label: Text("Password"),
                   border: OutlineInputBorder()
               ),
             ),
-            SizedBox(height: 10,),
-            ElevatedButton(onPressed: (){}, child: Text('Login')),
+            const SizedBox(height: 10,),
+            ElevatedButton(onPressed: (){}, child: const Text('Login')),
             OutlinedButton(
                 onPressed: (){
-                  Navigator.pushNamed(context, 'signup_page');
+                  Navigator.pushNamed(context, 'registerUser');
                 },
-                child: Text('SignUp'))
+                child: const Text('SignUp'))
 
           ],
         ),
