@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Home1 extends StatefulWidget {
+  const Home1({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home1> createState() => _Home1State();
 }
 
-
-class _HomeState extends State<Home> {
-
-  void loading()async {
-
-  }
+class _Home1State extends State<Home1> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, 'splash');
+    Future.delayed(Duration(seconds: 2), (){
+      Navigator.pushReplacementNamed(context, routeName)
     });
   }
   @override

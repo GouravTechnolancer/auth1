@@ -14,7 +14,9 @@ class _ProfileState extends State<Profile> {
         style: TextStyle(color: Colors.black),),
         centerTitle: true,elevation: 0,
         backgroundColor: Colors.white,
-        leading: const Icon(Icons.arrow_back,color:Colors.black),
+        leading: IconButton(icon: Icon(Icons.arrow_back,color: Colors.black,),onPressed: (){
+          Navigator.pop(context);
+        },),
         actions: const [
           Icon(Icons.notifications,color:Colors.black)
         ],
@@ -22,42 +24,46 @@ class _ProfileState extends State<Profile> {
 
       body:ListView(
         children: [
-          Center(
-            child: Stack(
-              children: [
-                Container(
-                  width:130,
-                  height: 130,
-                  decoration: BoxDecoration(
-                      color:Colors.red,
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                        image: NetworkImage('https://images.unsplash.com/photo-'
-                            '1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wx'
-                            'MjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto'
-                            '=format&fit=crop&w=1740&q=80'),
-                        fit: BoxFit.cover
-
-                      ),
-                    border:Border.all(width:4,color: Colors.white),
-                  ),
-                ),
-                Positioned(
-                    bottom: 0,
-                    right: 5,
-                    child: Container(
-                      width:40,
-                      height: 40,
+          Column(
+            children: [
+              Center(
+                child: Stack(
+                  children: [
+                    Container(
+                      width:130,
+                      height: 130,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey.shade400,
-                        border: Border.all(width:2,color: Colors.white)
+                          color:Colors.red,
+                          shape: BoxShape.circle,
+                          image: const DecorationImage(
+                            image: NetworkImage('https://images.unsplash.com/photo-'
+                                '1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wx'
+                                'MjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto'
+                                '=format&fit=crop&w=1740&q=80'),
+                            fit: BoxFit.cover
+
+                          ),
+                        border:Border.all(width:4,color: Colors.white),
                       ),
-                      child: const Icon(Icons.edit),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 5,
+                        child: Container(
+                          width:40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade400,
+                            border: Border.all(width:2,color: Colors.white)
+                          ),
+                          child: const Icon(Icons.edit),
+                        )
                     )
-                )
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
           Column(
             children: [

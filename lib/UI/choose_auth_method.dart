@@ -90,7 +90,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
               const Icon(Icons.account_circle,size: 45),
               OutlinedButton(
                   onPressed: (){
-                    Navigator.pushNamed(context, "routeName");
+                    Navigator.pushNamed(context, "profile");
                   },
                   child: const Text('Profile'))
             ],
