@@ -1,3 +1,4 @@
+import 'package:auth/app_theme.dart';
 import 'package:auth/firebase_options.dart';
 import 'package:auth/UI/sign_in_with_google.dart';
 import 'package:auth/UI/home.dart';
@@ -8,28 +9,40 @@ import 'package:auth/UI/register_user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
+import 'package:provider/provider.dart';
 import 'UI/choose_auth_method.dart';
 import 'UI/profile.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options:DefaultFirebaseOptions.currentPlatform
   );
-  runApp(MaterialApp(
-    home:const Splash(),
-    initialRoute: 'home',
-    routes: {
-      'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
-      'registerUser': (context)=> const RegisterUser(),
-      'signInWithEmail':(context)=>const SignInWithEmail(),
-      'signInWithPhone':(context)=>const SignInWithPhone(),
-      'otpVerification':(context) =>const OtpVerification(),
-      'home':(context)=> const Home(),
-      'signInWithGoogle':(context)=> const SignInWithGoogle(),
-      'profile':(context) =>Profile(),
-      'splash':(context)=> Splash()
-    },
+  runApp(ChangeNotifierProvider(
+    create: (context) => AppTheme(),
+    child: Consumer<AppTheme>(
+      builder: (context , state,child){
+        return  MaterialApp(
+
+          debugShowCheckedModeBanner: false,
+          home:const Splash(),
+          initialRoute: 'chooseAuthMethod',
+          routes: {
+            'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
+            'registerUser': (context)=> const RegisterUser(),
+            'signInWithEmail':(context)=>const SignInWithEmail(),
+            'signInWithPhone':(context)=>const SignInWithPhone(),
+            'otpVerification':(context) =>const OtpVerification(),
+            'home':(context)=> const Home(),
+            'signInWithGoogle':(context)=> const SignInWithGoogle(),
+            'profile':(context) =>const Profile(),
+            'splash':(context)=> const Splash()
+          },
+        );
+      },
+
+    ),
   ));
 }
 class Splash extends StatefulWidget {
@@ -41,7 +54,7 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
 
-  void choose_auth()async{
+  void chooseAuth()async{
     Future.delayed(const Duration(seconds: 2),(){
       Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
     });
@@ -50,35 +63,29 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    // choose_auth();
+    chooseAuth();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 180,),
-          Center(
-            child: Container(
-              width:180,
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 2
-                  )
-                ]
-              ),
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              border:Border.all(width: 4,color:Colors.black54)
+            ),
+            child: const Image(image: AssetImage('assets/work.png')
+                ,width: 250,height: 300,
+
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height:400),
+              const SizedBox(height:400),
               Center(
                 child: JumpingDots(
                   color: Colors.black54,
@@ -87,7 +94,7 @@ class _SplashState extends State<Splash> {
 
             ],
           ),
-          Text('Powered by Technolancer',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+          const Text('Powered by Technolancer',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
 
 
 

@@ -10,10 +10,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  void loading()async {
-
-  }
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +24,14 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(image: AssetImage('assets/work.png'))
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                border: Border.all(width: 4,color:Colors.white.withOpacity(0.4))
+              ),
+                child: const Image(
+                    image: AssetImage('assets/work.png')
+                ))
           ],
         ),
       ),

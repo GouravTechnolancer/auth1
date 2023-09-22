@@ -36,7 +36,6 @@ class _SignInWithEmailState extends State<SignInWithEmail> {
             ElevatedButton(onPressed: (){}, child: const Text('Login')),
             OutlinedButton(
                 onPressed: (){
-                  Navigator.pushNamed(context, 'registerUser');
                 },
                 child: const Text('SignUp'))
 

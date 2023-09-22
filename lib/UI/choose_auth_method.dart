@@ -1,4 +1,5 @@
 import 'package:auth/Model/employee.dart';
+import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,60 +45,137 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         }
       });
     }
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Choose Sign In Method'),),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.mail,size: 45),
-              OutlinedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, "signInWithEmail");
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: const Text('Choose Sign In Method'),backgroundColor:appbar,centerTitle: true,elevation: 0,),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 40,),
+            const Image(image: AssetImage('assets/work.png'),width: 220,fit: BoxFit.cover),
+            const SizedBox(height: 30,),
+            SizedBox(
+              width: 350,
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Email address',
+                ),
+              ),
+            ),
+            const SizedBox(height: 4,),
+            SizedBox(
+              width: 350,
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Password',
+                ),
+              ),
+            ),
+            const SizedBox(height: 10,),
+            SizedBox(
+              width: 350,
+              child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),onPressed: (){
+              },
+                  child: const Text('Login')),
+            ),
+            const SizedBox(height: 10,),
+            SizedBox(
+              width: 350,
+              child: Row(
+                children: [
+                  const Text("Don't have an account? "),
+                  GestureDetector(onTap:(){
+                    Navigator.pushNamed(context, 'registerUser');
                   },
-                  child: const Text('Email Login'))
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.phone,size: 45),
-              OutlinedButton(
-                  onPressed: (){
-                   Navigator.pushNamed(context, "signInWithPhone");
-                  },
-                  child: const Text('Phone Login'))
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.manage_accounts,size: 45),
-              OutlinedButton(
-                  onPressed: (){
-                    pd.show(msg:'Login in');
-                    signInWithGoogle();
-                  },
-                  child: const Text('Google Login'))
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.account_circle,size: 45),
-              OutlinedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, "profile");
-                  },
-                  child: const Text('Profile'))
-            ],
-          ),
-
-        ],
+                      child: const Text('Sign up',style: TextStyle(color: Colors.blue),))
+                ],
+              ),
+            ),
+            const SizedBox(height: 50,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               SizedBox(
+                 width: 220,
+                 child: OutlinedButton(onPressed: (){}, child: const Row(
+                   children: [
+                     Image(image: AssetImage('assets/linkedin (1).png') ,height: 20,),
+                     SizedBox(width: 10,),
+                     Text('Sign in With LinkedIn ',overflow: TextOverflow.ellipsis,)
+                   ],)),)
+             ],),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: OutlinedButton(onPressed: (){
+                    Navigator.pushNamed(context, 'signInWithPhone');
+                  }, child: const Row(
+                    children: [
+                      Image(image: AssetImage('assets/phone.png') ,height: 20,),
+                      SizedBox(width: 10,),
+                      Text('Sign in With Phone ')
+                    ],)),)
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: OutlinedButton(onPressed: (){
+                    Navigator.pushNamed(context, 'signInWithGoogle');
+                  }, child: const Row(
+                    children: [
+                      Image(image: AssetImage('assets/google.png') ,height: 20,),
+                      SizedBox(width: 10,),
+                      Text('Sign in With Google ')
+                    ],
+                  )
+                  ),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: OutlinedButton(onPressed: (){}, child: const Row(
+                    children: [
+                      Image(image: AssetImage('assets/microsoft.png') ,height: 20,),
+                      SizedBox(width: 10,),
+                      Text('Sign in With Microsoft ',overflow: TextOverflow.ellipsis,)
+                    ],)),)
+              ],),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: OutlinedButton(onPressed: (){}, child: const Row(
+                    children: [
+                      Image(image: AssetImage('assets/github.png') ,height: 20,),
+                      SizedBox(width: 10,),
+                      Text('Sign in With GitHib ',overflow: TextOverflow.ellipsis,)
+                    ],)),)
+              ],)
+          ],
+        ),
       ),
     );
   }
 }
+// mainAxisAlignment: MainAxisAlignment.center,
+// children: [
+//     ElevatedButton.icon(onPressed: (){
+//       Navigator.pushNamed(context, "signInWithEmail");
+//     }, icon: const Icon(Icons.mail,size:35,),
+//       label: const Text('signInWithEmail',style: TextStyle(fontSize: 17)),
+//       style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff090909),shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(20)
+//       )),)

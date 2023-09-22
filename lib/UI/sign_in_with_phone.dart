@@ -1,9 +1,10 @@
+import 'package:auth/variable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignInWithPhone extends StatefulWidget {
   static String verify="";
-
+  static String contact ="";
   const SignInWithPhone({super.key});
 
   @override
@@ -21,14 +22,15 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Phone '),),
+      appBar: AppBar(title: const Text('Phone '),backgroundColor: appbar),
       body: Container(
         margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Phone Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-            const Text('We need to register your phone before getting started !'),
+            Image(image: AssetImage('assets/work.png'),width: 220),
+            Text('Phone Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.green),),
+            const Text('We need to register your phone before getting started !',style: TextStyle(color: Colors.black54),),
             const SizedBox(height: 25,),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -53,6 +55,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
                       keyboardType: TextInputType.phone,
                       onChanged: (value){
                         phone= value;
+                        SignInWithPhone.contact=value;
                       },
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -77,7 +80,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
               );
 
             },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(
+              style: ElevatedButton.styleFrom(backgroundColor:Color(0xff7c7c7c),shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
               )),
                 child: const Text('Send Code'),

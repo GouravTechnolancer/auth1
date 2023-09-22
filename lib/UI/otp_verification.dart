@@ -11,11 +11,9 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   final FirebaseAuth auth =FirebaseAuth.instance;
-
+  String phoneNumber =SignInWithPhone.contact;
   @override
   Widget build(BuildContext context) {
-
-
     var code="";
     return Scaffold(
       appBar: AppBar(title: const Text('Phone '),),
@@ -38,9 +36,12 @@ class _OtpVerificationState extends State<OtpVerification> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(onPressed: ()async{
+
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: SignInWithPhone.verify, smsCode: code);
                 await auth.signInWithCredential(credential);
-                if(mounted)Navigator.pushNamed(context, "chooseAuthMethod");
+                if(mounted)Navigator.pushNamed(context, "registerUser",arguments: {
+                  'contact':phoneNumber
+                });
 
               },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(
