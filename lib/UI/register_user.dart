@@ -14,25 +14,19 @@ class RegisterUser extends StatefulWidget {
 }
 
 class _RegisterUserState extends State<RegisterUser> {
+
   final _formKey =GlobalKey<FormState>();
   Employee employee = Employee();
   Map? data;
   String? numbers;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      employee.phoneNumber = data?['contact'];
-      setState(() {
-      });
-    });
-  }
+
   @override
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
-    print(data?['contact'] ?? "");
-    // data?["con"] == null ? "" : data?["con"];
+    employee = data?["employee"] ?? Employee();
+    print('${employee.phoneNumber}');
     ProgressDialog pd = ProgressDialog(context: context);
+    print(employee);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
@@ -75,7 +69,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           decoration: const InputDecoration(
                               hintText: 'Enter your contact',
                               border: OutlineInputBorder(),
-                              label: Text('')
+                              label: Text('Phone')
                           ),
                           onChanged: ((val) => employee.phoneNumber = val),
                           validator: ((val) => val!.isEmpty ? "Enter contact number" : null),

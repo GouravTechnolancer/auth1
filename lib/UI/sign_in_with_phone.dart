@@ -1,3 +1,5 @@
+import 'package:auth/Model/employee.dart';
+import 'package:auth/UI/sign_in_with_google.dart';
 import 'package:auth/variable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,9 @@ class SignInWithPhone extends StatefulWidget {
 }
 
 class _SignInWithPhoneState extends State<SignInWithPhone> {
+
   TextEditingController countryCode =TextEditingController();
-  var phone = "";
+  Employee employee = Employee();
   @override
   void initState() {
     countryCode.text="+91";
@@ -51,11 +54,14 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
                   ),
                   const Text('|',style: TextStyle(fontSize: 35),),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
                       keyboardType: TextInputType.phone,
                       onChanged: (value){
-                        phone= value;
-                        SignInWithPhone.contact=value;
+                        employee.phoneNumber= value;
+
+                      },
+                      onFieldSubmitted: (val){
+                        print(employee.phoneNumber);
                       },
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -69,12 +75,14 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
 
             ElevatedButton(onPressed: ()async {
               await FirebaseAuth.instance.verifyPhoneNumber(
-                phoneNumber: countryCode.text+phone,
+                phoneNumber: countryCode.text+employee.phoneNumber!,
                 verificationCompleted: (PhoneAuthCredential credential) {},
                 verificationFailed: (FirebaseAuthException e) {},
                 codeSent: (String verificationId, int? resendToken) {
                   SignInWithPhone.verify = verificationId;
-                  Navigator.pushReplacementNamed(context, "otpVerification");
+                  Navigator.pushReplacementNamed(context, "otpVerification", arguments: {
+                    "employee" : employee
+                  });
                 },
                 codeAutoRetrievalTimeout: (String verificationId) {},
               );

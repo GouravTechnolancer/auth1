@@ -1,3 +1,4 @@
+import 'package:auth/Model/employee.dart';
 import 'package:auth/UI/sign_in_with_phone.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,13 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   final FirebaseAuth auth =FirebaseAuth.instance;
-  String phoneNumber =SignInWithPhone.contact;
+  Employee employee = Employee();
+
   @override
   Widget build(BuildContext context) {
-    var code="";
+    Map? data = ModalRoute.of(context)!.settings.arguments as Map;
+    employee = data["employee"];
+    String code="";
     return Scaffold(
       appBar: AppBar(title: const Text('Phone '),),
       body: Container(
@@ -40,7 +44,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: SignInWithPhone.verify, smsCode: code);
                 await auth.signInWithCredential(credential);
                 if(mounted)Navigator.pushNamed(context, "registerUser",arguments: {
-                  'contact':phoneNumber
+                  'employee': employee
                 });
 
               },
@@ -50,8 +54,6 @@ class _OtpVerificationState extends State<OtpVerification> {
                 child: const Text('Verified Code'),
               ),
             )
-
-
           ],
         ),
       ),
