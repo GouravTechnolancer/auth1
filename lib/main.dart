@@ -27,7 +27,7 @@ void main() async{
 
           debugShowCheckedModeBanner: false,
           home:const Splash(),
-          initialRoute: 'chooseAuthMethod',
+          initialRoute: 'home',
           routes: {
             'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
             'registerUser': (context)=> const RegisterUser(),
