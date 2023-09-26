@@ -3,6 +3,7 @@ import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 class ChooseAuthMethod extends StatefulWidget {
@@ -18,7 +19,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
   String? password;
   final _formKey = GlobalKey<FormState>();
 
-  String? error;
+  String? error = "";
   @override
   Widget build(BuildContext context) {
 
@@ -32,7 +33,6 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         accessToken:googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
       await FirebaseAuth.instance.signInWithCredential(credential);
       User? user = FirebaseAuth.instance.currentUser;
       // await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
@@ -66,8 +66,9 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 width: 350,
                 child: TextFormField(
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Email address',
+                      suffixIcon:Icon(Icons.mail,color: Colors.black,),
+                      border: OutlineInputBorder(),
+                      hintText: 'Email address',
                   ),
                   onChanged: (value){
                     email=value;
@@ -78,9 +79,11 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
               SizedBox(
                 width: 350,
                 child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Password',
+                  obscureText: true,
+                    decoration: const InputDecoration(
+                      suffixIcon:Icon(Icons.remove_red_eye,color: Colors.black,),
+                      border: OutlineInputBorder(),
+                      hintText: 'Password',
                   ),
                   onChanged: (value){
                     password=value;
@@ -172,8 +175,8 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 children: [
                   SizedBox(
                     width: 220,
-                    child: OutlinedButton(onPressed: (){
-                      Navigator.pushNamed(context, 'signInWithGoogle');
+                    child: OutlinedButton(onPressed:(){
+                      signInWithGoogle();
                     }, child: const Row(
                       children: [
                         Image(image: AssetImage('assets/google.png') ,height: 20,),
@@ -195,18 +198,21 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                         Image(image: AssetImage('assets/microsoft.png') ,height: 20,),
                         SizedBox(width: 10,),
                         Text('Sign in With Microsoft ',overflow: TextOverflow.ellipsis,)
-                      ],)),)
+                      ],)),
+                  )
                 ],),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: 220,
-                    child: OutlinedButton(onPressed: (){}, child: const Row(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(backgroundColor: Colors.grey),
+                        onPressed: (){}, child: const Row(
                       children: [
                         Image(image: AssetImage('assets/github.png') ,height: 20,),
                         SizedBox(width: 10,),
-                        Text('Sign in With GitHib ',overflow: TextOverflow.ellipsis,)
+                        Text('Sign in With GitHib ',overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white),)
                       ],)),)
                 ],)
             ],
@@ -215,7 +221,12 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
       ),
     );
   }
+
+
 }
+
+
+
 // mainAxisAlignment: MainAxisAlignment.center,
 // children: [
 //     ElevatedButton.icon(onPressed: (){

@@ -12,6 +12,7 @@ import 'package:jumping_dot/jumping_dot.dart';
 import 'package:provider/provider.dart';
 import 'UI/choose_auth_method.dart';
 import 'UI/profile.dart';
+import 'UI/sign_in_github.dart';
 
 
 void main() async{
@@ -27,8 +28,9 @@ void main() async{
 
           debugShowCheckedModeBanner: false,
           home:const Splash(),
-          initialRoute: 'home',
+          initialRoute: 'chooseAuthMethod',
           routes: {
+            // 'myapp':(context) => MyApp(),
             'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
             'registerUser': (context)=> const RegisterUser(),
             'signInWithEmail':(context)=>const SignInWithEmail(),

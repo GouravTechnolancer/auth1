@@ -20,6 +20,12 @@ class _RegisterUserState extends State<RegisterUser> {
   Map? data;
   String? numbers;
 
+  String? chooseValue;
+  List<String> listItem=[
+    'Male',
+    'Female'
+  ];
+
   @override
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
@@ -37,14 +43,14 @@ class _RegisterUserState extends State<RegisterUser> {
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           elevation: 10,
-          margin: EdgeInsets.fromLTRB(20, 60, 20, 40),
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 40),
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20,),
+              SizedBox(height: 10,),
               Image(image:AssetImage('assets/work.png'),width: 220),
-              SizedBox(height: 40,),
+              SizedBox(height: 20,),
               Text('Register yourself',style: TextStyle(fontWeight: FontWeight.bold),),
               Form(
                 key: _formKey,
@@ -119,6 +125,57 @@ class _RegisterUserState extends State<RegisterUser> {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 10,),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter Password',
+                            label: Text('Age'),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value){
+                            employee.age=value;
+                          },),
+                        const SizedBox(height: 10,),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(width:1,color: Colors.grey)
+                          ),
+                          child: DropdownButton(
+                            icon: Icon(Icons.arrow_drop_down),
+                            isExpanded: true,
+                            underline: SizedBox(),
+                            value: chooseValue,
+                            onChanged: (value){
+                              setState(() {
+                                chooseValue=value;
+                                employee.gender=value;
+                                print('${employee.age}'+'${employee.dob}'+'${employee.gender}'+'${employee.email}'+'${employee.phoneNumber}'+'${employee.name}');
+                              });
+                            },
+                            items: listItem.map((valueItem) {
+                              return DropdownMenuItem(
+                                  value:valueItem,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(valueItem,style: TextStyle(color: Colors.grey.shade600),),
+                                  )
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+                        TextFormField(
+                          initialValue: employee.dob,
+                          decoration: const InputDecoration(
+                            hintText: 'dd-mm-yyyy',
+                            label: Text('DateOfBirth'),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value){
+                            employee.dob=value;
+                          },),
                         const SizedBox(height: 20,),
                         Container(
                           width:220,
@@ -134,7 +191,14 @@ class _RegisterUserState extends State<RegisterUser> {
                                             User? user = FirebaseAuth.instance.currentUser;
                                              await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
                                              pd.close();
-                                             if(mounted)Navigator.pushNamed(context, "home");
+                                             if(mounted)Navigator.pushNamed(context, "profile",arguments: {
+                                               'name': employee.name,
+                                               'phone':employee.phoneNumber,
+                                               'email':employee.email,
+                                               'age':employee.age,
+                                               'dob':employee.dob,
+                                               'gender':employee.gender
+                                             });
 
                                       });
                                   }

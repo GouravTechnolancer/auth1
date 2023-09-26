@@ -3,16 +3,22 @@ class Employee{
   String? email;
   String? password;
   String? phoneNumber;
+  String? gender;
+  String? age;
+  String? dob;
 
 
-  Employee({this.name, this.email, this.password, this.phoneNumber});
+  Employee({this.name, this.email, this.password, this.phoneNumber,this.gender,this.dob,this.age});
 
   Map<String,dynamic> toJson(){
     return {
       'name':name,
       'email':email,
       'password':password,
-      'phoneNumber': phoneNumber
+      'phoneNumber': phoneNumber,
+      'gender':gender,
+      'age':age,
+      'dob':dob
     };
   }
 }

@@ -7,8 +7,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+  Map data = {};
+
   @override
   Widget build(BuildContext context) {
+    data =ModalRoute.of(context)?.settings.arguments as Map;
     return SafeArea(child: Scaffold(
       appBar: AppBar(title:const Text('Profile',
         style: TextStyle(color: Colors.black),),
@@ -103,7 +107,12 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5),
                          color: Colors.grey,
                       ),
-                      child: const Center(child: Text('Gourav', overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)),
+                      child: Center(child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          hintText: '${data['name']}'
+                        ),
+                      )),
                     ),
                   )
 
@@ -146,7 +155,7 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5)   ,
                         color: Colors.grey,
                       ),
-                      child: const Center(child: Text('23',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),)),
+                      child: const Center(child: Text('0',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),)),
                     ),
                   )
 
