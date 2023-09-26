@@ -18,7 +18,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
   String? password;
   final _formKey = GlobalKey<FormState>();
 
-  String? error;
+  String? error = "";
   @override
   Widget build(BuildContext context) {
 
