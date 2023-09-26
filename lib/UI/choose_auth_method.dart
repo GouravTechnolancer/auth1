@@ -77,8 +77,43 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
             const SizedBox(height: 10,),
             SizedBox(
               width: 350,
-              child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),onPressed: (){
-              },
+              child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),
+                                   onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          pd.show(msg: "Please Wait...");
+                          try {
+                            await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                            pd.close();
+                            if (mounted) {
+                              Navigator.pushReplacementNamed(context, "/home");
+                            }
+                          }on FirebaseAuthException catch (e) {
+                            pd.close();
+                            if (e.code == 'weak-password') {
+                              setState(() {
+                                error = "Weak password";
+                              });
+                            } else if (e.code == 'email-already-in-use') {
+                              setState(() {
+                                error = "Account already exists";
+                              });
+                            } else if (e.code == 'wrong-password') {
+                              setState(() {
+                                error = "Wrong password";
+                              });
+                            } else {
+                              setState(() {
+                                error = "Email does not exist";
+                              });
+                            }
+                          } catch (e) {
+                            pd.close();
+                            setState(() {
+                              error = "Something went wrong";
+                            });
+                          }
+                        }
+                      },
                   child: const Text('Login')),
             ),
             const SizedBox(height: 10,),
