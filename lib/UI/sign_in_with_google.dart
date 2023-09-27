@@ -4,8 +4,6 @@ import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sn_progress_dialog/progress_dialog.dart';
 class SignInWithGoogle extends StatefulWidget {
   const SignInWithGoogle({super.key});
 
@@ -18,9 +16,7 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
   Employee employee =Employee();
   @override
   Widget build(BuildContext context) {
-    ProgressDialog pd = ProgressDialog(context: context);
     data = ModalRoute.of(context)?.settings.arguments as Map;
-    print(data);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(title: const Text('Register'),backgroundColor: appbar),
@@ -54,16 +50,14 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
             TextFormField(
               readOnly: true,
               decoration: InputDecoration(
-                  suffixIcon:Icon(Icons.email,color: Colors.blue,),
+                  suffixIcon:const Icon(Icons.email,color: Colors.blue,),
                   hintText: '${data['email']}',
                   border: const OutlineInputBorder()
               ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor: Color(0xff7c7c7c)),onPressed: ()async{
+            ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),onPressed: ()async{
               employee.email = '${data['email']}';
-              print('${employee.name}');
-              print(employee.phoneNumber);
               await FirebaseAuth.instance.createUserWithEmailAndPassword(
                   email: employee.email!,
                   password: employee.name!,

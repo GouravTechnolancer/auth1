@@ -13,12 +13,13 @@ class OtpVerification extends StatefulWidget {
 class _OtpVerificationState extends State<OtpVerification> {
   final FirebaseAuth auth =FirebaseAuth.instance;
   Employee employee = Employee();
+  String code="";
 
   @override
   Widget build(BuildContext context) {
     Map? data = ModalRoute.of(context)!.settings.arguments as Map;
     employee = data["employee"];
-    String code="";
+
     return Scaffold(
       appBar: AppBar(title: const Text('Phone '),),
       body: Container(
@@ -43,9 +44,11 @@ class _OtpVerificationState extends State<OtpVerification> {
 
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: SignInWithPhone.verify, smsCode: code);
                 await auth.signInWithCredential(credential);
-                if(mounted)Navigator.pushNamed(context, "registerUser",arguments: {
+                if(mounted) {
+                  Navigator.pushNamed(context, "registerUser",arguments: {
                   'employee': employee
                 });
+                }
 
               },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(

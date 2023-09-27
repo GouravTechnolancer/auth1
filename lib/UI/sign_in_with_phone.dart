@@ -30,8 +30,8 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(image: AssetImage('assets/work.png'),width: 220),
-            Text('Phone Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.green),),
+            const Image(image: AssetImage('assets/work.png'),width: 220),
+            const Text('Phone Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.green),),
             const Text('We need to register your phone before getting started !',style: TextStyle(color: Colors.black54),),
             const SizedBox(height: 25,),
             Container(
@@ -60,7 +60,6 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
 
                       },
                       onFieldSubmitted: (val){
-                        print(employee.phoneNumber);
                       },
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -87,7 +86,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
               );
 
             },
-              style: ElevatedButton.styleFrom(backgroundColor:Color(0xff7c7c7c),shape: RoundedRectangleBorder(
+              style: ElevatedButton.styleFrom(backgroundColor:const Color(0xff7c7c7c),shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
               )),
                 child: const Text('Send Code'),

@@ -12,7 +12,6 @@ import 'package:jumping_dot/jumping_dot.dart';
 import 'package:provider/provider.dart';
 import 'UI/choose_auth_method.dart';
 import 'UI/profile.dart';
-import 'UI/sign_in_github.dart';
 
 
 void main() async{

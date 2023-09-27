@@ -136,6 +136,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       SizedBox(
                         height: 52,
                         child: DropdownButtonFormField(
+
                           decoration: const InputDecoration(
                             border: OutlineInputBorder()
                           ),

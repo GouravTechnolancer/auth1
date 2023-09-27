@@ -3,7 +3,6 @@ import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 class ChooseAuthMethod extends StatefulWidget {
@@ -91,7 +90,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 ),
               ),
               const SizedBox(height: 10,),
-              error == null ? Text(""):Text('${error}',style: TextStyle(color: Colors.red),),
+              error == null ? const Text(""):Text('$error',style: const TextStyle(color: Colors.red),),
               SizedBox(
                 width: 350,
                 child: ElevatedButton(
@@ -101,9 +100,21 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                         pd.show(msg: "Please Wait...");
                         try {
                           await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
+                          User user = FirebaseAuth.instance.currentUser!;
+                          await FirebaseFirestore.instance.collection("user").doc(user.uid).get().then((DocumentSnapshot snapshot) {
+                            employee = Employee.fromMap(snapshot.id, snapshot.data() as Map<String,dynamic>);
+                          });
                           pd.close();
                           if (mounted) {
-                            Navigator.pushReplacementNamed(context, "profile");
+                            Navigator.pushReplacementNamed(context, "profile",arguments: {
+                                'name':employee.name,
+                                'age':employee.age,
+                                'gender': employee.gender,
+                                'email':employee.email,
+                                'phone': employee.phoneNumber,
+                                'dob':employee.dob,
+
+                            });
                           }
                         }on FirebaseAuthException catch (e) {
                           pd.close();
@@ -112,7 +123,6 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                             //   error = "Email Not Found";
                             // });
                           } else if (e.code == 'wrong-password') {
-                            print("1");
                             // setState(() {
                             //   error = "Wrong Password";
                             // });
@@ -122,10 +132,9 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                             });
                           }
                         }
-                        print(error);
                       }
                     },
-                    child: Text('Login')),
+                    child: const Text('Login')),
 
               ),
 
@@ -224,6 +233,8 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
 
 
 }
+
+
 
 
 
