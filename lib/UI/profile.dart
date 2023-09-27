@@ -8,7 +8,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  Map data = {};
+  Map data={};
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class _ProfileState extends State<Profile> {
         style: TextStyle(color: Colors.black),),
         centerTitle: true,elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back,color: Colors.black,),onPressed: (){
+        leading: IconButton(icon: const Icon(Icons.arrow_back,color: Colors.black,),onPressed: (){
           Navigator.pop(context);
         },),
         actions: const [
@@ -155,10 +155,15 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5)   ,
                         color: Colors.grey,
                       ),
-                      child: const Center(child: Text('0',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),)),
+                      child: Center(child:
+                            Center(child: TextFormField(
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                    hintText: '${data['age']}'
+                              ),
+                              )),
                     ),
-                  )
-
+                  ))
                 ],
               ) ,
               const SizedBox(height:25 ,),
@@ -198,7 +203,12 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5)   ,
                         color: Colors.grey,
                       ),
-                      child: const Center(child: Text('Male',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),)),
+                      child: Center(child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            hintText: '${data['gender']}'
+                        ),
+                      ),),
                     ),
                   )
 
@@ -241,7 +251,12 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5)   ,
                         color: Colors.grey,
                       ),
-                      child: const Center(child: Text('  gourav.technolancer@gmail.com  ', overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),),),
+                      child: Center(child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            hintText: '${data['email']}'
+                        ),
+                      ),),
                     ),
                   )
 
@@ -284,7 +299,12 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5)   ,
                         color: Colors.grey,
                       ),
-                      child: const Center(child: Text('7710567945',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),)),
+                      child: Center(child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            hintText: '${data['phone']}'
+                        ),
+                      ),),
                     ),
                   )
 
@@ -327,7 +347,12 @@ class _ProfileState extends State<Profile> {
                         borderRadius:   BorderRadius.circular(5)   ,
                         color: Colors.grey,
                       ),
-                      child: const Center(child: Text('20-20-0000',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold),)),
+                      child: Center(child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            hintText: '${data['dob']}'
+                        ),
+                      ),),
                     ),
                   )
 
@@ -348,7 +373,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 child:const Center(child: Text('Term & Conditions',style: TextStyle(color: Colors.blue),),)
               ),
-              Divider(thickness: 3,)
+              const Divider(thickness: 3,)
               ]),
 
             ],
@@ -356,34 +381,34 @@ class _ProfileState extends State<Profile> {
       bottomNavigationBar: Row(
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(40, 0, 0, 0),
             width: 50,
             height: 50,
-            child: CircleAvatar(
+            child: const CircleAvatar(
               backgroundImage: AssetImage('assets/messenger.png'),
             ),
           ) ,
           Container(
-            margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(40, 0, 0, 0),
             width: 50,
             height: 50,
-            child: CircleAvatar(
+            child: const CircleAvatar(
               backgroundImage: AssetImage('assets/linkedin.png'),
             ),
           ) ,
           Container(
-             margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
+             margin: const EdgeInsets.fromLTRB(40, 0, 0, 0),
              width: 50,
             height: 50,
-            child: CircleAvatar(
+            child: const CircleAvatar(
               backgroundImage: AssetImage('assets/instagram.png'),
             ),
           ) ,
           Container(
             width: 50,
             height: 50,
-            margin: EdgeInsets.fromLTRB(30,  0, 0, 0),
-           child: CircleAvatar(
+            margin: const EdgeInsets.fromLTRB(30,  0, 0, 0),
+           child: const CircleAvatar(
              backgroundImage: AssetImage('assets/facebook.png'),
            ),
           ),
