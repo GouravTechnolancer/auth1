@@ -1,5 +1,6 @@
-import 'dart:io';
+import 'package:auth/UI/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
@@ -11,18 +12,26 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
 
   Map data = {};
+  Uint8List? _image;
+  void selectImageCamera()async{
+    Uint8List img = await pickImageFrom(ImageSource.camera);
+    setState(() {
+      _image = img;
+    });
+  }
+  void selectImageGallery()async{
+    Uint8List img = await pickImageFrom(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
 
-  // File ? _selectedImage;
-  File? pickedFile;
-  ImagePicker imagePicker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute
-        .of(context)
-        ?.settings
-        .arguments as Map;
-    return SafeArea(child: Scaffold(
+    data = ModalRoute.of(context)?.settings.arguments as Map;
+    return SafeArea(child:
+    Scaffold(
         appBar: AppBar(
           title: const Text('Profile',
             style: TextStyle(color: Colors.black),),
@@ -46,18 +55,13 @@ class _ProfileState extends State<Profile> {
                 Center(
                   child: Stack(
                     children: [
-                      Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                          border: Border.all(width: 4, color: Colors.white),
-                          // image: DecorationImage(
-                          //   // image: _selectedImage! == null ?AssetImage('assets/register.png'): AssetImage(FileImage(_selectedImage?.path as File) as String),
-                          //   // fit: BoxFit.cover
-                          // )
-                        ),
+                      _image != null ?CircleAvatar(
+                        radius: 60,
+                        backgroundImage: MemoryImage(_image!),
+                      ):
+                      const CircleAvatar(
+                          radius: 60,
+                          backgroundImage: AssetImage('assets/user.png'),
                       ),
                       Positioned(
                           bottom: 0,
@@ -478,21 +482,21 @@ class _ProfileState extends State<Profile> {
           .of(context)
           .size
           .width,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          Text('Choose profile photo', style: TextStyle(fontSize: 20.0),)
-          , SizedBox(height: 20,),
+          const Text('Choose profile photo', style: TextStyle(fontSize: 20.0),)
+          , const SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton.icon(onPressed: () {
-                _pickImageFrom(ImageSource.gallery);
-              }, icon: Icon(Icons.image), label: Text('gallery')),
-              SizedBox(width: 50,),
+                selectImageGallery();
+              }, icon: const Icon(Icons.image), label: const Text('gallery')),
+              const SizedBox(width: 50,),
               ElevatedButton.icon(onPressed: () {
-                _pickImageFrom(ImageSource.camera);
-              }, icon: Icon(Icons.camera), label: Text('camera'))
+                selectImageCamera();
+              }, icon: const Icon(Icons.camera), label: const Text('camera'))
             ],
           )
         ],
@@ -500,26 +504,5 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  //Images picker from Gallery
-  Future<void> _pickImageFrom(ImageSource source) async {
-    final pickedImage = await ImagePicker().pickImage(source: source);
-    // final returnedCamera = await ImagePicker().pickImage(source: ImageSource.camera);
-    pickedFile = File(pickedImage!.path);
-    print(pickedFile);
-    //   setState(() {
-    //     _selectedImage = File(returnedImage!.path);
-    //     // _selectedImage = File(returnedCamera!.path);
-    //   });
-  }
 
-  // Images picker from camera
-  // Future _pickImageFromGallery(ImageSource source) async {
-  //   final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   pickedFile = File(pickedImage!.path);
-  //   print(pickedFile);
-  //   // setState(() {
-  //   //   _selectedImage = File(returnedCamera!.path);
-  //   // });
-
-  }
 }

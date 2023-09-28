@@ -17,7 +17,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
   String? email;
   String? password;
   final _formKey = GlobalKey<FormState>();
-
+  bool obsure =true;
   String? error = "";
   @override
   Widget build(BuildContext context) {
@@ -34,13 +34,16 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
       User? user = FirebaseAuth.instance.currentUser;
+      print(user?.uid);
       // await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
       // print('succefully submited');
 
       await FirebaseFirestore.instance.collection("user").doc(user!.uid).get().then((DocumentSnapshot snapshot){
         if(!snapshot.exists){
           pd.close();
-          Navigator.pushNamed(context, "signInWithGoogle",arguments: {
+          Navigator.pushNamed(context, "registerUser",arguments: {
+            'image':user.photoURL,
+            'name':user.displayName,
             'email':user.email,
           });
         }
@@ -49,6 +52,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         }
       });
     }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Choose Sign In Method'),backgroundColor:appbar,centerTitle: true,elevation: 0,),
@@ -78,9 +82,14 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
               SizedBox(
                 width: 350,
                 child: TextFormField(
-                  obscureText: true,
-                    decoration: const InputDecoration(
-                      suffixIcon:Icon(Icons.remove_red_eye,color: Colors.black,),
+                  obscureText: obsure,
+                    decoration: InputDecoration(
+                      suffixIcon:IconButton(icon:Icon(Icons.remove_red_eye,color: Colors.black,),onPressed:(){
+                        setState(() {
+                          print('hello');
+                          obsure = !obsure;
+                        });
+                      } ),
                       border: OutlineInputBorder(),
                       hintText: 'Password',
                   ),

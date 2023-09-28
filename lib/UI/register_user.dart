@@ -29,6 +29,7 @@ class _RegisterUserState extends State<RegisterUser> {
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
     employee = data?["employee"] ?? Employee();
+    print('hello'+ '${data}');
     ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       backgroundColor: bgcolor,
@@ -58,9 +59,9 @@ class _RegisterUserState extends State<RegisterUser> {
                       TextFormField(
                         initialValue: employee.name,
                         decoration: const InputDecoration(
-                          hintText: 'Enter Full Name',
+                          hintText: '',
                           border: OutlineInputBorder(),
-                          label: Text('Name')
+                          label: Text('Name'),
                         ),
                         onChanged: ((val) => employee.name = val),
                         validator: ((val) => val!.isEmpty ? "Enter Valid Name" : null),
@@ -133,10 +134,10 @@ class _RegisterUserState extends State<RegisterUser> {
                           employee.age=value;
                         },),
                       const SizedBox(height: 10,),
+                      //Gender
                       SizedBox(
                         height: 52,
                         child: DropdownButtonFormField(
-
                           decoration: const InputDecoration(
                             border: OutlineInputBorder()
                           ),
@@ -158,6 +159,7 @@ class _RegisterUserState extends State<RegisterUser> {
                         ),
                       ),
                       const SizedBox(height: 10,),
+                      //Date-Of-Birth
                       TextFormField(
                         initialValue: employee.dob,
                         decoration: const InputDecoration(

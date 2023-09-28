@@ -1,4 +1,3 @@
-
 import 'package:auth/Model/employee.dart';
 import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,6 +16,7 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context)?.settings.arguments as Map;
+    print(data);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(title: const Text('Register'),backgroundColor: appbar),
@@ -25,11 +25,18 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            CircleAvatar(
+              radius: 70,
+              backgroundImage: NetworkImage('https://lh3.googleusercontent.com/a/ACg8ocI4ho4Q8MvUpVuBzW7ZXLBFwxaxGOgIwpK0GE7MbpMZ=s96-c'),
+            ),
+            SizedBox(height: 20,),
             TextFormField(
-              decoration: const InputDecoration(
+              readOnly: true,
+              decoration:  InputDecoration(
+                hintText: '${data['name']}',
                 suffixIcon:Icon(Icons.account_circle),
                 border: OutlineInputBorder(),
-                label: Text('Name'),
+
               ),
               onChanged: (value){
                 employee.name=value;
@@ -58,6 +65,8 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
             const SizedBox(height: 10),
             ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),onPressed: ()async{
               employee.email = '${data['email']}';
+              employee.name ='${data['name']}';
+              employee.phoneNumber ='${data['phone']}';
               await FirebaseAuth.instance.createUserWithEmailAndPassword(
                   email: employee.email!,
                   password: employee.name!,
