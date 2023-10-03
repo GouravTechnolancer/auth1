@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'UI/choose_auth_method.dart';
 import 'UI/profile.dart';
 
-
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -27,7 +26,7 @@ void main() async{
 
           debugShowCheckedModeBanner: false,
           home:const Splash(),
-          initialRoute: 'chooseAuthMethod',
+          initialRoute: 'home',
           routes: {
             // 'myapp':(context) => MyApp(),
             'chooseAuthMethod':(context)=>const ChooseAuthMethod(),

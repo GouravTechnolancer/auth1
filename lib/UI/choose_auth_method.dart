@@ -45,6 +45,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
             'image':user.photoURL,
             'name':user.displayName,
             'email':user.email,
+            'showPasswordField': false,
           });
         }
         else{
@@ -127,10 +128,12 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                           }
                         }on FirebaseAuthException catch (e) {
                           pd.close();
-                          if (e.code == 'user-not-found') {
-                            // setState(() {
-                            //   error = "Email Not Found";
-                            // });
+                          print('-----------------------------------');
+                          print(e.code);
+                          if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+                            setState(() {
+                              error = "INVALID LOGIN CREDENTIALS";
+                            });
                           } else if (e.code == 'wrong-password') {
                             // setState(() {
                             //   error = "Wrong Password";
@@ -154,7 +157,9 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                   children: [
                     const Text("Don't have an account? "),
                     GestureDetector(onTap:(){
-                      Navigator.pushNamed(context, 'registerUser');
+                      Navigator.pushNamed(context, 'registerUser',arguments: {
+                        'showPasswordField': true
+                      });
                     },
                         child: const Text('Sign up',style: TextStyle(color: Colors.blue),))
                   ],

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import '../Model/employee.dart';
+import 'package:intl/intl.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({super.key});
@@ -14,22 +15,60 @@ class RegisterUser extends StatefulWidget {
 
 class _RegisterUserState extends State<RegisterUser> {
 
+  @override
+
+  final TextEditingController _dateController = TextEditingController();
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1999, 1),
+      lastDate: DateTime(2023, 12),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+      });
+    }
+  }
+
+
+
+
   final _formKey =GlobalKey<FormState>();
   Employee employee = Employee();
   Map? data;
   String? numbers;
-
   String? chooseValue;
   List<String> listItem=[
     'Male',
     'Female'
   ];
+  String? name;
+  String? email;
+  String? password;
+  //bool showPasswordField = true;
 
   @override
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
     employee = data?["employee"] ?? Employee();
-    print('hello'+ '${data}');
+    name = data!["name"];
+    email =data!["email"];
+    bool showPasswordField = data!["showPasswordField"];
+    if(data!['name']!=null) {
+      employee.name ='${data!['name']}' ;
+    }
+    if(data!['email']!=null) {
+      employee.email ='${data!['email']}' ;
+    }
+    if(data!['phone']!=null){employee.phoneNumber='${data!['email']}';}
+    if(showPasswordField == false){
+      employee.password = 'Gou@4545454545@';
+    }
+
+    print(showPasswordField);
     ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       backgroundColor: bgcolor,
@@ -57,9 +96,9 @@ class _RegisterUserState extends State<RegisterUser> {
                   child: Column(
                     children: [
                       TextFormField(
-                        initialValue: employee.name,
+                        initialValue: name,
                         decoration: const InputDecoration(
-                          hintText: '',
+                          hintText: 'Enter Name',
                           border: OutlineInputBorder(),
                           label: Text('Name'),
                         ),
@@ -79,8 +118,9 @@ class _RegisterUserState extends State<RegisterUser> {
                       ),
                       const SizedBox(height: 10,),
                       TextFormField(
+                        initialValue: email,
                         decoration: const InputDecoration(
-                            hintText: 'Enter your Email',
+                            hintText: 'Enter Email',
                             label: Text('Email'),
                           border: OutlineInputBorder(),
                         ),
@@ -96,35 +136,37 @@ class _RegisterUserState extends State<RegisterUser> {
                         },
                       ),
                       const SizedBox(height: 10,),
-                      TextFormField(
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            hintText: 'Enter Password',
-                            label: Text('Password'),
-                          border: OutlineInputBorder(),
+                      Visibility(
+                        visible: showPasswordField,
+                        child: TextFormField(
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              hintText: 'Enter Password',
+                              label: Text('Password'),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value){
+                              employee.password=value;
+                          },
+                          validator: (value){
+                            if(value!.isEmpty){
+                              return "Password cannot be empty";
+                            }if (!value.contains(RegExp(r'[A-Z]'))) {
+                              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The password must contain at least one uppercase letter')));
+                              return 'The password must contain at least one uppercase letter.';
+                            }
+                            if (!value.contains(RegExp(r'[a-z]'))) {
+                              return 'The password must contain at least one lowercase letter.';
+                            }
+                            if (!value.contains(RegExp(r'[0-9]'))) {
+                              return 'The password must contain at least one number.';
+                            }
+                            return null;
+                          },
                         ),
-                        onChanged: (value){
-                            employee.password=value;
-                        },
-                        validator: (value){
-                          if(value!.isEmpty){
-                            return "Password cannot be empty";
-                          }if (!value.contains(RegExp(r'[A-Z]'))) {
-                            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The password must contain at least one uppercase letter')));
-                            return 'The password must contain at least one uppercase letter.';
-                          }
-                          if (!value.contains(RegExp(r'[a-z]'))) {
-                            return 'The password must contain at least one lowercase letter.';
-                          }
-                          if (!value.contains(RegExp(r'[0-9]'))) {
-                            return 'The password must contain at least one number.';
-                          }
-                          return null;
-                        },
                       ),
                       const SizedBox(height: 10,),
                       TextFormField(
-                        obscureText: true,
                         decoration: const InputDecoration(
                           hintText: 'Enter Password',
                           label: Text('Age'),
@@ -136,12 +178,12 @@ class _RegisterUserState extends State<RegisterUser> {
                       const SizedBox(height: 10,),
                       //Gender
                       SizedBox(
-                        height: 52,
+                        height:60,
                         child: DropdownButtonFormField(
+                          hint: Text('Gender'),
                           decoration: const InputDecoration(
                             border: OutlineInputBorder()
                           ),
-                          icon: const Icon(Icons.arrow_drop_down),
                           isExpanded: true,
                           value: chooseValue,
                           onChanged: (value){
@@ -150,10 +192,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           items: listItem.map((valueItem) {
                             return DropdownMenuItem(
                                 value:valueItem,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(valueItem,style: TextStyle(color: Colors.grey.shade600),),
-                                )
+                                child: Text(valueItem,style: TextStyle(color: Colors.grey.shade600),)
                             );
                           }).toList(),
                         ),
@@ -161,30 +200,35 @@ class _RegisterUserState extends State<RegisterUser> {
                       const SizedBox(height: 10,),
                       //Date-Of-Birth
                       TextFormField(
-                        initialValue: employee.dob,
+                        controller: _dateController,
                         decoration: const InputDecoration(
-                          hintText: 'dd-mm-yyyy',
+                          hintText: 'Select a date',
                           label: Text('DateOfBirth'),
                           border: OutlineInputBorder(),
                         ),
+                        // onTap: _selectDate,
                         onChanged: (value){
                           employee.dob=value;
-                        },),
+                        },
+                      ),
                       const SizedBox(height: 20,),
                       SizedBox(
                         width:220,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),
                             onPressed: ()async{
+                            print(employee.name);
+                            print(employee.age);print(employee.password);print(employee.email);print(employee.phoneNumber);print(employee.dob);print(employee.gender);
+
                               if(_formKey.currentState!.validate())
                                 {
-                                  pd.show(msg: "please wait ",backgroundColor: Colors.green.shade600, );
+                                  // pd.show(msg: "please wait ",backgroundColor: Colors.grey, );
                                     await FirebaseAuth.instance.createUserWithEmailAndPassword(
                                         email: employee.email!,
                                         password: employee.password!).then((value)async {
                                           User? user = FirebaseAuth.instance.currentUser;
                                            await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
-                                           pd.close();
+                                           // pd.close();
                                            if(mounted) {
                                              Navigator.pushNamed(context, "profile",arguments: {
                                              'name': employee.name,
@@ -195,7 +239,6 @@ class _RegisterUserState extends State<RegisterUser> {
                                              'gender':employee.gender
                                            });
                                            }
-
                                     });
                                 }
                             },

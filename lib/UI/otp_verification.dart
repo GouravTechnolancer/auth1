@@ -46,7 +46,8 @@ class _OtpVerificationState extends State<OtpVerification> {
                 await auth.signInWithCredential(credential);
                 if(mounted) {
                   Navigator.pushNamed(context, "registerUser",arguments: {
-                  'employee': employee
+                    'employee': employee,
+                    'showPasswordField': false
                 });
                 }
 
