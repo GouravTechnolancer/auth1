@@ -2,9 +2,7 @@ import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import '../Model/employee.dart';
-import 'package:intl/intl.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({super.key});
@@ -15,29 +13,14 @@ class RegisterUser extends StatefulWidget {
 
 class _RegisterUserState extends State<RegisterUser> {
 
-  @override
-
   final TextEditingController _dateController = TextEditingController();
 
-  Future<void> _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1999, 1),
-      lastDate: DateTime(2023, 12),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-      });
-    }
-  }
 
 
 
 
   final _formKey =GlobalKey<FormState>();
-  Employee employee = Employee(image: null);
+  UserProfile employee = UserProfile(image: null);
   Map? data;
   String? numbers;
   String? chooseValue;
@@ -53,7 +36,7 @@ class _RegisterUserState extends State<RegisterUser> {
   @override
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
-    employee = data?["employee"] ?? Employee(image: null);
+    employee = data?["employee"] ?? UserProfile(image: null);
     name = data!["name"];
     email =data!["email"];
     bool showPasswordField = data!["showPasswordField"];
@@ -68,8 +51,6 @@ class _RegisterUserState extends State<RegisterUser> {
       employee.password = 'Gou@4545454545@';
     }
 
-    print(showPasswordField);
-    ProgressDialog pd = ProgressDialog(context: context);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
@@ -180,7 +161,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       SizedBox(
                         height:60,
                         child: DropdownButtonFormField(
-                          hint: Text('Gender'),
+                          hint: const Text('Gender'),
                           decoration: const InputDecoration(
                             border: OutlineInputBorder()
                           ),
@@ -217,8 +198,7 @@ class _RegisterUserState extends State<RegisterUser> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),
                             onPressed: ()async{
-                            print(employee.name);
-                            print(employee.age);print(employee.password);print(employee.email);print(employee.phoneNumber);print(employee.dob);print(employee.gender);
+
 
                               if(_formKey.currentState!.validate())
                                 {

@@ -15,7 +15,7 @@ class SignInWithPhone extends StatefulWidget {
 class _SignInWithPhoneState extends State<SignInWithPhone> {
 
   TextEditingController countryCode =TextEditingController();
-  Employee employee = Employee(image: null);
+  UserProfile employee = UserProfile(image: null);
   @override
   void initState() {
     countryCode.text="+91";

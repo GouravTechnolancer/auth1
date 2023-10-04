@@ -1,7 +1,9 @@
+import 'package:auth/UI/home.dart';
+import 'package:auth/UI/manage_users.dart';
 import 'package:auth/app_theme.dart';
 import 'package:auth/firebase_options.dart';
 import 'package:auth/UI/sign_in_with_google.dart';
-import 'package:auth/UI/home.dart';
+import 'package:auth/UI/work_hub_logo.dart';
 import 'package:auth/UI/otp_verification.dart';
 import 'package:auth/UI/sign_in_with_phone.dart';
 import 'package:auth/UI/sign_in_with_email.dart';
@@ -25,10 +27,9 @@ void main() async{
     child: Consumer<AppTheme>(
       builder: (context , state,child){
         return  MaterialApp(
-
           debugShowCheckedModeBanner: false,
           home:const Splash(),
-          initialRoute: 'home',
+          initialRoute: 'splash',
           routes: {
             // 'myapp':(context) => MyApp(),
             'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
@@ -36,10 +37,12 @@ void main() async{
             'signInWithEmail':(context)=>const SignInWithEmail(),
             'signInWithPhone':(context)=>const SignInWithPhone(),
             'otpVerification':(context) =>const OtpVerification(),
-            'home':(context)=> const Home(),
+            'workhublogo':(context)=> const WorkHubLogo(),
             'signInWithGoogle':(context)=> const SignInWithGoogle(),
             'profile':(context) =>const Profile(),
-            'splash':(context)=> const Splash()
+            'splash':(context)=> const Splash(),
+            'home' : (context) => const Home(),
+            'manageUsers' : (context) => const ManageUsers()
           },
         );
       },
@@ -62,21 +65,17 @@ class _SplashState extends State<Splash> {
       final currentUser = FirebaseAuth.instance.currentUser;
       if(currentUser!=null){
         String uid = FirebaseAuth.instance.currentUser!.uid;
-        DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(uid);
-        DocumentSnapshot snapshot = await reference.get();
-        if (snapshot.exists) {
-          // Navigate to the profile page.
-          Navigator.pushNamed(context, 'profile');
-        } else {
-          Navigator.pushNamed(context, 'registerUser' ,arguments: {
-            'showPasswordField':true
-          });
-        }
-      }
-      else {
+        await FirebaseFirestore.instance.collection("user").doc(uid).get().then((DocumentSnapshot snapshot){
+          if (snapshot.exists) {
+            // Navigate to the profile page.
+            Navigator.pushNamed(context, 'home');
+          }else{
+            Navigator.pushNamed(context, 'registerUser' ,arguments: {'showPasswordField':true});
+          }
+        });
+      }else{
           Navigator.pushNamed(context, 'chooseAuthMethod');
         }
-
     });
 
   }

@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'package:auth/Model/employee.dart';
-import 'package:auth/UI/image_picker.dart';
 import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -16,20 +13,15 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  late Employee employee;
+  late UserProfile employee;
   late StreamSubscription employeeListener;
   bool loading = true;
-  Uint8List? _image;
   void selectImageCamera()async{
-    Uint8List img = await pickImageFrom(ImageSource.camera);
     setState(() {
-      _image = img;
     });
   }
   void selectImageGallery()async{
-    Uint8List img = await pickImageFrom(ImageSource.gallery);
     setState(() {
-      _image = img;
     });
   }
 
@@ -38,8 +30,7 @@ class _ProfileState extends State<Profile> {
     DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(uid);
     employeeListener = reference.snapshots().listen((DocumentSnapshot snapshot) {
       if(snapshot.exists){
-        employee = Employee.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
-        print(employee.image);
+        employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
       }
       setState(() {
         loading = false;
@@ -58,82 +49,80 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return SafeArea(child:
     Scaffold(
+        // appBar: AppBar(title: const Text('Profile', style: TextStyle(color: Colors.black),),
+        //   centerTitle: true,
+        //   elevation: 0,
+        //   backgroundColor: appbar,
+        //   leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.black,),
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },),
+        //   actions: const [
+        //     Icon(Icons.notifications, color: Colors.black)
+        //   ],
+        // ),
+      appBar: AppBar(title: const Text('Profile'),centerTitle: true,elevation: 0,backgroundColor: appbar,),
+        body: SingleChildScrollView(
+          child: loading ? const Center(child: CircularProgressIndicator(),) :
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 10,),
+                Stack(
+                  children: [
+                    employee.image != null ? CircleAvatar(
+                      radius: 70,
+                      // backgroundImage: MemoryImage(_image!),
+                      backgroundImage: NetworkImage(employee.image!)
+                    ):
+                    const CircleAvatar(
+                        radius: 60,
+                        backgroundImage: AssetImage('assets/user.png'),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 5,
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade400,
+                              border: Border.all(
+                                  width: 2, color: Colors.white)
+                          ),
+                          child: IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                showModalBottomSheet(context: context,
+                                    builder: (builder) => bottomsheet());
+                              }
 
-        appBar: AppBar(title: const Text('Profile', style: TextStyle(color: Colors.black),),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: appbar,
-          leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.black,),
-            onPressed: () {
-              Navigator.pop(context);
-            },),
-          actions: const [
-            Icon(Icons.notifications, color: Colors.black)
-          ],
-        ),
-        body: loading ? const Center(child: CircularProgressIndicator(
-        ),) : Container(
-          color: Colors.white,
-          child: ListView(
-            children: [
-              Column(
-                children: [
-                  SizedBox(height: 10,),
-                  Stack(
-                    children: [
-                      employee.image != null ? CircleAvatar(
-                        radius: 70,
-                        // backgroundImage: MemoryImage(_image!),
-                        backgroundImage: NetworkImage(employee.image!)
-                      ):
-                      const CircleAvatar(
-                          radius: 60,
-                          backgroundImage: AssetImage('assets/user.png'),
-                        backgroundColor: Colors.transparent,
-                      ),
-                      Positioned(
-                          bottom: 0,
-                          right: 5,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey.shade400,
-                                border: Border.all(
-                                    width: 2, color: Colors.white)
-                            ),
-                            child: IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  showModalBottomSheet(context: context,
-                                      builder: (builder) => bottomsheet());
-                                }
-
-                            ),
-                          )
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(onPressed: () {
-
-                       },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0x0000000a)),
-                        child: const Text('Edit Profile'),),
-                      const SizedBox(height: 25,),
-                    ],
-                  ),
-                  const SizedBox(height: 15,),
-                  Row(
-                    children: [
-                      Container(
+                          ),
+                        )
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0x0000000a)),
+                      child: const Text('Edit Profile'),),
+                    const SizedBox(height: 15,),
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: SizedBox(
-                          width: 175,
                           height: 40,
                           child: Container(
                             decoration: BoxDecoration(
@@ -142,19 +131,20 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Row(
                               children: [
-                                SizedBox(width: 20,),
+                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                                 Icon(Icons.person, color: Colors.white),
                                 SizedBox(width: 20,),
-                                Text('Name', style: TextStyle(color: Colors.white,
-                                    fontWeight: FontWeight.bold),),
+                                Text('Name', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      SizedBox(
-                        width: 180,
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      flex: 4,
+                      child: SizedBox(
                         height: 40,
                         child: Container(
                           decoration: BoxDecoration(
@@ -171,14 +161,16 @@ class _ProfileState extends State<Profile> {
                             ),
                           )),
                         ),
-                      )
-
-                    ],
-                  ),
-                  const SizedBox(height: 25,),
-                  Row(
-                    children: [
-                      Container(
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: SizedBox(
                           width: 175,
@@ -190,8 +182,8 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Row(
                               children: [
-                                SizedBox(width: 20,),
-                                Icon(Icons.edit, color: Colors.white,),
+                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
+                                Icon(Icons.cake, color: Colors.white,),
                                 SizedBox(width: 20,),
                                 Text('Age', style: TextStyle(color: Colors.white,
                                     fontWeight: FontWeight.bold),),
@@ -200,8 +192,11 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      SizedBox(
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      flex: 4,
+                      child: SizedBox(
                           width: 180,
                           height: 40,
                           child: Container(
@@ -220,13 +215,16 @@ class _ProfileState extends State<Profile> {
                               ),
                             )),
                             ),
-                          ))
-                    ],
-                  ),
-                  const SizedBox(height: 25,),
-                  Row(
-                    children: [
-                      Container(
+                          )),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: SizedBox(
                           width: 175,
@@ -238,7 +236,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Row(
                               children: [
-                                SizedBox(width: 20,),
+                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                                 Icon(Icons.person, color: Colors.white,),
                                 SizedBox(width: 20,),
                                 Text('Gender', style: TextStyle(
@@ -249,8 +247,11 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      SizedBox(
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      flex: 4,
+                      child: SizedBox(
                         width: 180,
                         height: 40,
                         child: Container(
@@ -268,14 +269,17 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),),
                         ),
-                      )
+                      ),
+                    )
 
-                    ],
-                  ),
-                  const SizedBox(height: 25,),
-                  Row(
-                    children: [
-                      Container(
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: SizedBox(
                           width: 175,
@@ -287,7 +291,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Row(
                               children: [
-                                SizedBox(width: 20,),
+                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                                 Icon(Icons.mail, color: Colors.white,),
                                 SizedBox(width: 20,),
                                 Text('Email', style: TextStyle(
@@ -298,8 +302,11 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      SizedBox(
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      flex:4,
+                      child: SizedBox(
                         width: 180,
                         height: 40,
                         child: Container(
@@ -317,14 +324,17 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),),
                         ),
-                      )
+                      ),
+                    )
 
-                    ],
-                  ),
-                  const SizedBox(height: 25,),
-                  Row(
-                    children: [
-                      Container(
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: SizedBox(
                           width: 175,
@@ -336,7 +346,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Row(
                               children: [
-                                SizedBox(width: 20,),
+                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                                 Icon(Icons.phone, color: Colors.white,),
                                 SizedBox(width: 20,),
                                 Text('Phone', style: TextStyle(
@@ -347,8 +357,11 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      SizedBox(
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      flex: 4,
+                      child: SizedBox(
                         width: 180,
                         height: 40,
                         child: Container(
@@ -366,14 +379,17 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),),
                         ),
-                      )
+                      ),
+                    )
 
-                    ],
-                  ),
-                  const SizedBox(height: 25,),
-                  Row(
-                    children: [
-                      Container(
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: SizedBox(
                           width: 175,
@@ -385,7 +401,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Row(
                               children: [
-                                SizedBox(width: 20,),
+                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                                 Icon(Icons.calendar_month, color: Colors.white,),
                                 SizedBox(width: 20,),
                                 Text('D-O-B', style: TextStyle(
@@ -396,12 +412,15 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      SizedBox(
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      flex: 4,
+                      child: SizedBox(
                         width: 180,
                         height: 40,
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.grey,
@@ -416,31 +435,31 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),),
                         ),
-                      )
-
-                    ],
-                  ),
-                  const SizedBox(height: 10,),
-                  ElevatedButton(onPressed: () async{
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
-                  },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0x0000000a)),
-                    child: const Text('Logout'),),
-                  Container(
-                      width: double.infinity,
-                      height: 15,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.rectangle
                       ),
-                      child: const Center(child: Text('Term & Conditions',
-                        style: TextStyle(color: Colors.blue),),)
-                  ),
-                  const Divider(thickness: 3,)
-                ],
-              ),
-            ],
+                    )
+
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                ElevatedButton(onPressed: () async{
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
+                },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0x0000000a)),
+                  child: const Text('Logout'),),
+                Container(
+                    width: double.infinity,
+                    height: 15,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.rectangle
+                    ),
+                    child: const Center(child: Text('Term & Conditions',
+                      style: TextStyle(color: Colors.blue),),)
+                ),
+                const Divider(thickness: 3,)
+              ],
+            ),
           ),
         ),
         // bottomNavigationBar: Row(

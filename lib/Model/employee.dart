@@ -1,4 +1,4 @@
-class Employee{
+class UserProfile{
   String? id;
   String? name;
   String? email;
@@ -9,7 +9,7 @@ class Employee{
   String? dob;
   String? image;
 
-  Employee({this.id, this.name, this.email, this.password, this.phoneNumber,this.gender,this.dob,this.age, this.image,});
+  UserProfile({this.id, this.name, this.email, this.password, this.phoneNumber,this.gender,this.dob,this.age, this.image,});
 
   Map<String,dynamic> toJson(){
     return {
@@ -25,8 +25,8 @@ class Employee{
     };
   }
 
-  factory Employee.fromMap(String id, Map<String, dynamic> map) {
-    return Employee(
+  factory UserProfile.fromMap(String id, Map<String, dynamic> map) {
+    return UserProfile(
       id: id,
       name: map["name"],
       email: map["email"],

@@ -13,7 +13,7 @@ class ChooseAuthMethod extends StatefulWidget {
 }
 
 class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
-  Employee employee = Employee(image: null);
+  UserProfile employee = UserProfile(image: null);
   String? email;
   String? password;
   final _formKey = GlobalKey<FormState>();
@@ -35,7 +35,6 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
       User? user = FirebaseAuth.instance.currentUser;
-      print(user?.uid);
       // await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
       // print('succefully submited');
 
@@ -50,7 +49,8 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
           });
         }
         else{
-          Navigator.pushNamed(context, "signInWithEmail");
+          Navigator.pushNamed(context, "home");
+
         }
       });
     }
@@ -61,7 +61,6 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         child: Form(
           key: _formKey,
           child: Column(
-
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // FirebaseFirestore.instance.collection('user').doc(uid!).get(DocumentSnapshot),
@@ -87,13 +86,12 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 child: TextFormField(
                   obscureText: obsure,
                     decoration: InputDecoration(
-                      suffixIcon:IconButton(icon:Icon(Icons.remove_red_eye,color: Colors.black,),onPressed:(){
+                      suffixIcon:IconButton(icon:const Icon(Icons.remove_red_eye,color: Colors.black,),onPressed:(){
                         setState(() {
-                          print('hello');
                           obsure = !obsure;
                         });
                       } ),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       hintText: 'Password',
                   ),
                   onChanged: (value){
@@ -112,27 +110,15 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                         pd.show(msg: "Please Wait...");
                         try {
                           await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
-                          User user = FirebaseAuth.instance.currentUser!;
-                          await FirebaseFirestore.instance.collection("user").doc(user.uid).get().then((DocumentSnapshot snapshot) {
-                            employee = Employee.fromMap(snapshot.id, snapshot.data() as Map<String,dynamic>);
-                          });
+                          // await FirebaseFirestore.instance.collection("user").doc(user.uid).get().then((DocumentSnapshot snapshot) {
+                          //   employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String,dynamic>);
+                          // });
                           pd.close();
                           if (mounted) {
-                            Navigator.pushReplacementNamed(context, "profile",arguments: {
-                                'name':employee.name,
-                                'age':employee.age,
-                                'gender': employee.gender,
-                                'email':employee.email,
-                                'phone': employee.phoneNumber,
-                                'dob':employee.dob,
-                                'image':employee.image
-
-                            });
+                            Navigator.pushReplacementNamed(context, "home");
                           }
                         }on FirebaseAuthException catch (e) {
                           pd.close();
-                          print('-----------------------------------');
-                          print(e.code);
                           if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
                             setState(() {
                               error = "INVALID LOGIN CREDENTIALS";

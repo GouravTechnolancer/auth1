@@ -12,11 +12,10 @@ class SignInWithGoogle extends StatefulWidget {
 
 class _SignInWithGoogleState extends State<SignInWithGoogle> {
   Map data={};
-  Employee employee =Employee(image: null);
+  UserProfile employee =UserProfile(image: null);
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context)?.settings.arguments as Map;
-    print(data);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(title: const Text('Register'),backgroundColor: appbar),
@@ -25,17 +24,17 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 70,
               backgroundImage: NetworkImage('https://lh3.googleusercontent.com/a/ACg8ocI4ho4Q8MvUpVuBzW7ZXLBFwxaxGOgIwpK0GE7MbpMZ=s96-c'),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             TextFormField(
               readOnly: true,
               decoration:  InputDecoration(
                 hintText: '${data['name']}',
-                suffixIcon:Icon(Icons.account_circle),
-                border: OutlineInputBorder(),
+                suffixIcon:const Icon(Icons.account_circle),
+                border: const OutlineInputBorder(),
 
               ),
               onChanged: (value){

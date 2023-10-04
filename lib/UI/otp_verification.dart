@@ -12,7 +12,7 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   final FirebaseAuth auth =FirebaseAuth.instance;
-  Employee employee = Employee(image: null);
+  UserProfile employee = UserProfile(image: null);
   String code="";
 
   @override
@@ -29,7 +29,7 @@ class _OtpVerificationState extends State<OtpVerification> {
           children: [
             const Text('Verification',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
             const Text('We need to register your phone before getting started !'),
-            const SizedBox(height: 25,),
+            const SizedBox(height: 15,),
             Pinput(
               onChanged: (value){
                 code=value;
