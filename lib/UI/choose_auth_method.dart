@@ -13,12 +13,13 @@ class ChooseAuthMethod extends StatefulWidget {
 }
 
 class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
-  Employee employee = Employee();
+  Employee employee = Employee(image: null);
   String? email;
   String? password;
   final _formKey = GlobalKey<FormState>();
   bool obsure =true;
   String? error = "";
+
   @override
   Widget build(BuildContext context) {
 
@@ -53,7 +54,6 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         }
       });
     }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Choose Sign In Method'),backgroundColor:appbar,centerTitle: true,elevation: 0,),
@@ -61,8 +61,10 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         child: Form(
           key: _formKey,
           child: Column(
+
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // FirebaseFirestore.instance.collection('user').doc(uid!).get(DocumentSnapshot),
               const SizedBox(height: 40,),
               const Image(image: AssetImage('assets/work.png'),width: 220,fit: BoxFit.cover),
               const SizedBox(height: 30,),
@@ -123,6 +125,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                                 'email':employee.email,
                                 'phone': employee.phoneNumber,
                                 'dob':employee.dob,
+                                'image':employee.image
 
                             });
                           }

@@ -12,7 +12,7 @@ class SignInWithGoogle extends StatefulWidget {
 
 class _SignInWithGoogleState extends State<SignInWithGoogle> {
   Map data={};
-  Employee employee =Employee();
+  Employee employee =Employee(image: null);
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context)?.settings.arguments as Map;

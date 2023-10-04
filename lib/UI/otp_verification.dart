@@ -12,7 +12,7 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   final FirebaseAuth auth =FirebaseAuth.instance;
-  Employee employee = Employee();
+  Employee employee = Employee(image: null);
   String code="";
 
   @override
@@ -47,7 +47,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                 if(mounted) {
                   Navigator.pushNamed(context, "registerUser",arguments: {
                     'employee': employee,
-                    'showPasswordField': false
+                    'showPasswordField': false,
                 });
                 }
 

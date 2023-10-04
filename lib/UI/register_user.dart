@@ -37,7 +37,7 @@ class _RegisterUserState extends State<RegisterUser> {
 
 
   final _formKey =GlobalKey<FormState>();
-  Employee employee = Employee();
+  Employee employee = Employee(image: null);
   Map? data;
   String? numbers;
   String? chooseValue;
@@ -53,7 +53,7 @@ class _RegisterUserState extends State<RegisterUser> {
   @override
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
-    employee = data?["employee"] ?? Employee();
+    employee = data?["employee"] ?? Employee(image: null);
     name = data!["name"];
     email =data!["email"];
     bool showPasswordField = data!["showPasswordField"];

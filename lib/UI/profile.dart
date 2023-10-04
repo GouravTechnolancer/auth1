@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'package:auth/Model/employee.dart';
 import 'package:auth/UI/image_picker.dart';
 import 'package:auth/variable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +16,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  Map data = {};
+  late Employee employee;
+  late StreamSubscription employeeListener;
+  bool loading = true;
   Uint8List? _image;
   void selectImageCamera()async{
     Uint8List img = await pickImageFrom(ImageSource.camera);
@@ -27,16 +33,36 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  void getData(){
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(uid);
+    employeeListener = reference.snapshots().listen((DocumentSnapshot snapshot) {
+      if(snapshot.exists){
+        employee = Employee.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
+        print(employee.image);
+      }
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context)?.settings.arguments as Map;
     return SafeArea(child:
     Scaffold(
+
         appBar: AppBar(title: const Text('Profile', style: TextStyle(color: Colors.black),),
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: appbar,
           leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.black,),
             onPressed: () {
               Navigator.pop(context);
@@ -45,17 +71,20 @@ class _ProfileState extends State<Profile> {
             Icon(Icons.notifications, color: Colors.black)
           ],
         ),
-        body: Container(
+        body: loading ? const Center(child: CircularProgressIndicator(
+        ),) : Container(
           color: Colors.white,
           child: ListView(
             children: [
               Column(
                 children: [
+                  SizedBox(height: 10,),
                   Stack(
                     children: [
-                      _image != null ?CircleAvatar(
-                        radius: 60,
-                        backgroundImage: MemoryImage(_image!),
+                      employee.image != null ? CircleAvatar(
+                        radius: 70,
+                        // backgroundImage: MemoryImage(_image!),
+                        backgroundImage: NetworkImage(employee.image!)
                       ):
                       const CircleAvatar(
                           radius: 60,
@@ -89,7 +118,9 @@ class _ProfileState extends State<Profile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(onPressed: () {},
+                      ElevatedButton(onPressed: () {
+
+                       },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0x0000000a)),
                         child: const Text('Edit Profile'),),
@@ -135,7 +166,7 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               enabled: false,
                               decoration: InputDecoration(
-                                  hintText: '${data['name']}'
+                                  hintText: employee.name
                               ),
                             ),
                           )),
@@ -184,7 +215,7 @@ class _ProfileState extends State<Profile> {
                               child: TextFormField(
                                 enabled: false,
                                 decoration: InputDecoration(
-                                    hintText: '${data['age']}'
+                                    hintText: employee.age
                                 ),
                               ),
                             )),
@@ -232,7 +263,7 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               enabled: false,
                               decoration: InputDecoration(
-                                  hintText: '${data['gender']}'
+                                  hintText: employee.gender
                               ),
                             ),
                           ),),
@@ -281,7 +312,7 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               enabled: false,
                               decoration: InputDecoration(
-                                  hintText: '${data['email']}'
+                                  hintText: employee.email
                               ),
                             ),
                           ),),
@@ -330,7 +361,7 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               enabled: false,
                               decoration: InputDecoration(
-                                  hintText: '${data['phone']}'
+                                  hintText: employee.phoneNumber
                               ),
                             ),
                           ),),
@@ -370,6 +401,7 @@ class _ProfileState extends State<Profile> {
                         width: 180,
                         height: 40,
                         child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.grey,
@@ -379,7 +411,7 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               enabled: false,
                               decoration: InputDecoration(
-                                  hintText: '${data['dob']}'
+                                  hintText: employee.dob
                               ),
                             ),
                           ),),
@@ -389,7 +421,10 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                   const SizedBox(height: 10,),
-                  ElevatedButton(onPressed: () {},
+                  ElevatedButton(onPressed: () async{
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
+                  },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0x0000000a)),
                     child: const Text('Logout'),),
@@ -481,6 +516,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
 
 
 }

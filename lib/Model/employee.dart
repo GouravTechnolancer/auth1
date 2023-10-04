@@ -7,10 +7,9 @@ class Employee{
   String? gender;
   String? age;
   String? dob;
+  String? image;
 
-
-
-  Employee({this.id, this.name, this.email, this.password, this.phoneNumber,this.gender,this.dob,this.age,});
+  Employee({this.id, this.name, this.email, this.password, this.phoneNumber,this.gender,this.dob,this.age, this.image,});
 
   Map<String,dynamic> toJson(){
     return {
@@ -22,6 +21,7 @@ class Employee{
       'gender':gender,
       'age':age,
       'dob':dob,
+      'image': image
     };
   }
 
@@ -35,6 +35,7 @@ class Employee{
       gender: map["gender"],
       age: map["age"],
       dob: map["dob"],
+      image: map['image']
     );
   }
 

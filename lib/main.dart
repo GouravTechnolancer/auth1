@@ -6,6 +6,8 @@ import 'package:auth/UI/otp_verification.dart';
 import 'package:auth/UI/sign_in_with_phone.dart';
 import 'package:auth/UI/sign_in_with_email.dart';
 import 'package:auth/UI/register_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
@@ -55,8 +57,26 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
 
   void chooseAuth()async{
-    Future.delayed(const Duration(seconds: 2),(){
-      Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
+    Future.delayed(const Duration(seconds: 2),()async{
+      // Navigator.pushReplacementNamed(context, 'splash');
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if(currentUser!=null){
+        String uid = FirebaseAuth.instance.currentUser!.uid;
+        DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(uid);
+        DocumentSnapshot snapshot = await reference.get();
+        if (snapshot.exists) {
+          // Navigate to the profile page.
+          Navigator.pushNamed(context, 'profile');
+        } else {
+          Navigator.pushNamed(context, 'registerUser' ,arguments: {
+            'showPasswordField':true
+          });
+        }
+      }
+      else {
+          Navigator.pushNamed(context, 'chooseAuthMethod');
+        }
+
     });
 
   }
