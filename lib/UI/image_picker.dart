@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 pickImageFrom(ImageSource source)async{
   UserProfile employee = UserProfile(image: null);
   final ImagePicker imagePicker =ImagePicker();
@@ -21,6 +22,7 @@ pickImageFrom(ImageSource source)async{
       await FirebaseFirestore.instance.collection("user").doc(user!.uid).update({'image': imageUrl});
       employee.image = imageUrl;
     }catch(e){
+      return e;
     }
     return await file.readAsBytes();
   }else{

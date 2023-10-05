@@ -1,5 +1,7 @@
+import 'package:auth/Model/employee.dart';
 import 'package:auth/UI/home.dart';
 import 'package:auth/UI/manage_users.dart';
+import 'package:auth/UI/warning.dart';
 import 'package:auth/app_theme.dart';
 import 'package:auth/firebase_options.dart';
 import 'package:auth/UI/sign_in_with_google.dart';
@@ -42,7 +44,8 @@ void main() async{
             'profile':(context) =>const Profile(),
             'splash':(context)=> const Splash(),
             'home' : (context) => const Home(),
-            'manageUsers' : (context) => const ManageUsers()
+            'manageUsers' : (context) => const ManageUsers(),
+            'warning' : (context) =>const Warning()
           },
         );
       },
@@ -62,18 +65,25 @@ class _SplashState extends State<Splash> {
   void chooseAuth()async{
     Future.delayed(const Duration(seconds: 2),()async{
       // Navigator.pushReplacementNamed(context, 'splash');
-      final currentUser = FirebaseAuth.instance.currentUser;
+      User? currentUser = FirebaseAuth.instance.currentUser;
       if(currentUser!=null){
         String uid = FirebaseAuth.instance.currentUser!.uid;
         await FirebaseFirestore.instance.collection("user").doc(uid).get().then((DocumentSnapshot snapshot){
           if (snapshot.exists) {
-            // Navigate to the profile page.
-            Navigator.pushNamed(context, 'home');
+            UserProfile employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
+            if(employee.isVerified == false) {
+              Navigator.pushNamed(context, 'warning');
+            }
+            else{
+              Navigator.pushReplacementNamed(context, 'home');
+            }
           }else{
-            Navigator.pushNamed(context, 'registerUser' ,arguments: {'showPasswordField':true});
+            print('1');
+            Navigator.pushNamed(context, 'chooseAuthMethod' ,arguments: {'showPasswordField':true});
           }
         });
       }else{
+        print('2');
           Navigator.pushNamed(context, 'chooseAuthMethod');
         }
     });
@@ -89,7 +99,7 @@ class _SplashState extends State<Splash> {
     return Scaffold(
       backgroundColor: Colors.white,
       body:Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             height: 100,
@@ -110,7 +120,6 @@ class _SplashState extends State<Splash> {
                   color: Colors.black54,
                 ),
               ),
-
             ],
           ),
           const Text('Powered by Technolancer',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),

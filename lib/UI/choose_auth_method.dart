@@ -50,12 +50,10 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
         }
         else{
           Navigator.pushNamed(context, "home");
-
         }
       });
     }
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Choose Sign In Method'),backgroundColor:appbar,centerTitle: true,elevation: 0,),
       body: SingleChildScrollView(
         child: Form(
@@ -104,7 +102,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
               SizedBox(
                 width: 350,
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7d7676)),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         pd.show(msg: "Please Wait...");
@@ -124,9 +122,9 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                               error = "INVALID LOGIN CREDENTIALS";
                             });
                           } else if (e.code == 'wrong-password') {
-                            // setState(() {
-                            //   error = "Wrong Password";
-                            // });
+                            setState(() {
+                              error = "Wrong Password";
+                            });
                           } else{
                             setState(() {
                               error = "Something Went Wrong";
@@ -135,8 +133,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                         }
                       }
                     },
-                    child: const Text('Login')),
-
+                    child: const Text('Login',style: TextStyle(color: Colors.white),)),
               ),
 
               const SizedBox(height: 10,),
@@ -159,7 +156,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 mainAxisAlignment: MainAxisAlignment.center,
                children: [
                  SizedBox(
-                   width: 220,
+                   width: 250,
                    child: OutlinedButton(onPressed: (){}, child: const Row(
                      children: [
                        Image(image: AssetImage('assets/linkedin (1).png') ,height: 20,),
@@ -171,7 +168,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 220,
+                    width: 250,
                     child: OutlinedButton(onPressed: (){
                       Navigator.pushNamed(context, 'signInWithPhone');
                     }, child: const Row(
@@ -186,7 +183,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 220,
+                    width: 250,
                     child: OutlinedButton(onPressed:(){
                       signInWithGoogle();
                     }, child: const Row(
@@ -204,7 +201,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 220,
+                    width: 250,
                     child: OutlinedButton(onPressed: (){}, child: const Row(
                       children: [
                         Image(image: AssetImage('assets/microsoft.png') ,height: 20,),
@@ -217,7 +214,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 220,
+                    width: 250,
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(backgroundColor: Colors.grey),
                         onPressed: (){}, child: const Row(

@@ -66,13 +66,8 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
               employee.email = '${data['email']}';
               employee.name ='${data['name']}';
               employee.phoneNumber ='${data['phone']}';
-              await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                  email: employee.email!,
-                  password: employee.name!,
-              ).then((value)async {
                 User? user = FirebaseAuth.instance.currentUser;
                 await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
-              });
             }, child: const Text("Registerd"))
           ],
         ),

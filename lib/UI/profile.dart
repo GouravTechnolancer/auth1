@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:auth/Model/employee.dart';
+import 'package:auth/UI/image_picker.dart';
 import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -12,26 +15,32 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-
+  late Uint8List _image;
   late UserProfile employee;
   late StreamSubscription employeeListener;
   bool loading = true;
   void selectImageCamera()async{
+    Uint8List img = await pickImageFrom(ImageSource.camera);
     setState(() {
+      _image = img;
     });
   }
   void selectImageGallery()async{
+    Uint8List img = await pickImageFrom(ImageSource.gallery);
     setState(() {
+      _image = img;
     });
   }
 
   void getData(){
     String uid = FirebaseAuth.instance.currentUser!.uid;
+    print('hello' + '${uid}');
     DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(uid);
     employeeListener = reference.snapshots().listen((DocumentSnapshot snapshot) {
       if(snapshot.exists){
         employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
       }
+
       setState(() {
         loading = false;
       });
@@ -61,7 +70,7 @@ class _ProfileState extends State<Profile> {
         //     Icon(Icons.notifications, color: Colors.black)
         //   ],
         // ),
-      appBar: AppBar(title: const Text('Profile'),centerTitle: true,elevation: 0,backgroundColor: appbar,),
+      appBar: AppBar(title: const Text('Profile'),elevation: 0,backgroundColor: appbar,),
         body: SingleChildScrollView(
           child: loading ? const Center(child: CircularProgressIndicator(),) :
           Padding(
@@ -454,10 +463,13 @@ class _ProfileState extends State<Profile> {
                     decoration: const BoxDecoration(
                         shape: BoxShape.rectangle
                     ),
-                    child: const Center(child: Text('Term & Conditions',
-                      style: TextStyle(color: Colors.blue),),)
+                    child: GestureDetector(
+                      onTap: (){
+                      },
+                      child: Center(child: Text('Term & Conditions',
+                        style: TextStyle(color: Colors.blue),),),
+                    )
                 ),
-                const Divider(thickness: 3,)
               ],
             ),
           ),

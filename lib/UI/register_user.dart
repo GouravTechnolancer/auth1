@@ -14,11 +14,6 @@ class RegisterUser extends StatefulWidget {
 class _RegisterUserState extends State<RegisterUser> {
 
   final TextEditingController _dateController = TextEditingController();
-
-
-
-
-
   final _formKey =GlobalKey<FormState>();
   UserProfile employee = UserProfile(image: null);
   Map? data;
@@ -32,11 +27,12 @@ class _RegisterUserState extends State<RegisterUser> {
   String? email;
   String? password;
   //bool showPasswordField = true;
-
   @override
   Widget build(context) {
     data = ModalRoute.of(context)!.settings.arguments as Map?;
     employee = data?["employee"] ?? UserProfile(image: null);
+    print(employee);
+    print(data!['users']);
     name = data!["name"];
     email =data!["email"];
     bool showPasswordField = data!["showPasswordField"];
@@ -198,35 +194,49 @@ class _RegisterUserState extends State<RegisterUser> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff7c7c7c)),
                             onPressed: ()async{
-
-
                               if(_formKey.currentState!.validate())
                                 {
-                                  // pd.show(msg: "please wait ",backgroundColor: Colors.grey, );
-                                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+
+                                  User? user;
+                                  employee.isVerified =false;
+                                  if(showPasswordField == true) {
+                                    await FirebaseAuth.instance
+                                        .createUserWithEmailAndPassword(
                                         email: employee.email!,
-                                        password: employee.password!).then((value)async {
-                                          User? user = FirebaseAuth.instance.currentUser;
-                                           await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
-                                           // pd.close();
-                                           if(mounted) {
-                                             Navigator.pushNamed(context, "profile",arguments: {
-                                             'name': employee.name,
-                                             'phone':employee.phoneNumber,
-                                             'email':employee.email,
-                                             'age':employee.age,
-                                             'dob':employee.dob,
-                                             'gender':employee.gender
-                                           });
-                                           }
-                                    });
+                                        password: employee.password!);
+                                    await FirebaseAuth.instance.signInWithEmailAndPassword(email: employee.email!, password: employee.password!);
+                                  }
+                                  user = FirebaseAuth.instance.currentUser;
+                                  print(user);
+                                    await FirebaseFirestore.instance.collection(
+                                        'user').doc(user!.uid).set(
+                                        employee.toJson());
+                                    if (mounted) {
+                                      Navigator.pushNamed(context, 'home');
+                                    }
+
                                 }
+                                // {
+                                //   User? user = FirebaseAuth.instance.currentUser;
+                                //   // pd.show(msg: "please wait ",backgroundColor: Colors.grey, );
+                                //   if(employee.phoneNumber == null){
+                                //     await FirebaseAuth.instance.createUserWithEmailAndPassword(email: employee.email!, password: employee.password!).then((value)async {
+                                //       await FirebaseFirestore.instance.collection("user").doc(user!.uid).set(employee.toJson());
+                                //       // pd.close();
+                                //     });
+                                //   }else if(employee.email !=null){
+                                //     FirebaseFirestore.instance.collection('user').doc(user!.uid).set(employee.toJson());
+                                //   }else if(employee.phoneNumber!=null){
+                                //     FirebaseFirestore.instance.collection('user').doc(user!.uid).set(employee.toJson());
+                                //   }
+                                //   if(mounted) {
+                                //     Navigator.pushNamed(context, "home");
+                                //   }
+                                // }
                             },
                             child: const Text('SignUp')
                         ),
                       )
-
-
                     ],
                   ),
                 ),

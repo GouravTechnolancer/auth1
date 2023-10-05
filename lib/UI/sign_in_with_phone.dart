@@ -16,6 +16,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
 
   TextEditingController countryCode =TextEditingController();
   UserProfile employee = UserProfile(image: null);
+  late String verification;
   @override
   void initState() {
     countryCode.text="+91";
@@ -79,12 +80,11 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
                 codeSent: (String verificationId, int? resendToken) {
                   SignInWithPhone.verify = verificationId;
                   Navigator.pushReplacementNamed(context, "otpVerification", arguments: {
-                    "employee" : employee
+                    "employee" : employee,
                   });
                 },
                 codeAutoRetrievalTimeout: (String verificationId) {},
               );
-
             },
               style: ElevatedButton.styleFrom(backgroundColor:const Color(0xff7c7c7c),shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
