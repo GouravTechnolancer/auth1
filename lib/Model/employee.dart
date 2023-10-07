@@ -42,8 +42,6 @@ class UserProfile{
       image: map['image'],
       type : map['type'],
       isVerified: map['isVerified']
-
-
     );
   }
 

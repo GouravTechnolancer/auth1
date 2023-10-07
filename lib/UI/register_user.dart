@@ -196,7 +196,6 @@ class _RegisterUserState extends State<RegisterUser> {
                             onPressed: ()async{
                               if(_formKey.currentState!.validate())
                                 {
-
                                   User? user;
                                   employee.isVerified =false;
                                   if(showPasswordField == true) {

@@ -30,6 +30,7 @@ class _MenuState extends State<Menu> {
                       elevation: 5,
                       child: Column(
                         children: [
+                          SizedBox(height: 5,),
                           Image(image: AssetImage('assets/management.png'),),
                           Text('ManageUsers')
                         ],
@@ -40,8 +41,28 @@ class _MenuState extends State<Menu> {
                       },
                     ),
                   )),
+              Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GestureDetector(
+                      child: Card(
+                          elevation: 5,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 5,),
+                              Image(image: AssetImage('assets/manageuser.png'),),
+                              Text('Manage Customers')
+                            ],
+                          )
+                      ),
+                      onTap: (){
+                        Navigator.pushNamed(context, 'manageCustomer');
+                      },
+                    ),
+                  )),
             ],
           ),
+
 
         ],
       ),

@@ -24,7 +24,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
   Widget build(BuildContext context) {
 
     ProgressDialog pd = ProgressDialog(context: context);
-
+    //Google Signin Method
     Future signInWithGoogle()async{
       GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       GoogleSignInAuthentication? googleAuth =await googleUser?.authentication;
@@ -76,6 +76,9 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                   onChanged: (value){
                     email=value;
                   },
+                    validator: (val){
+                      if(val == null)return 'Enter Email';
+                    }
                 ),
               ),
               const SizedBox(height: 4,),
@@ -94,6 +97,9 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                   ),
                   onChanged: (value){
                     password=value;
+                  },
+                  validator: (val){
+                    if(val == null)return 'Enter password';
                   },
                 ),
               ),
@@ -233,11 +239,6 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
 
 
 }
-
-
-
-
-
 // mainAxisAlignment: MainAxisAlignment.center,
 // children: [
 //     ElevatedButton.icon(onPressed: (){

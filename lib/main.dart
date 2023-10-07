@@ -1,5 +1,7 @@
 import 'package:auth/Model/employee.dart';
+import 'package:auth/UI/mange_customer.dart';
 import 'package:auth/UI/home.dart';
+import 'package:auth/UI/add_customer.dart';
 import 'package:auth/UI/manage_users.dart';
 import 'package:auth/UI/warning.dart';
 import 'package:auth/app_theme.dart';
@@ -45,7 +47,9 @@ void main() async{
             'splash':(context)=> const Splash(),
             'home' : (context) => const Home(),
             'manageUsers' : (context) => const ManageUsers(),
-            'warning' : (context) =>const Warning()
+            'warning' : (context) =>const Warning(),
+            'manageCustomer' : (context) => ManageCustomer(),
+            'addCustomers' : (context) =>AddCustomers()
           },
         );
       },
