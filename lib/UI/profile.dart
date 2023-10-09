@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:auth/Model/employee.dart';
+import 'package:auth/UI/Email%20verification.dart';
 import 'package:auth/UI/image_picker.dart';
 import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,21 +57,19 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    User? user =FirebaseAuth.instance.currentUser;
+    print(user!.emailVerified);
     return SafeArea(child:
     Scaffold(
-        // appBar: AppBar(title: const Text('Profile', style: TextStyle(color: Colors.black),),
-        //   centerTitle: true,
-        //   elevation: 0,
-        //   backgroundColor: appbar,
-        //   leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.black,),
-        //     onPressed: () {
-        //       Navigator.pop(context);
-        //     },),
-        //   actions: const [
-        //     Icon(Icons.notifications, color: Colors.black)
-        //   ],
-        // ),
-      appBar: AppBar(title: const Text('Profile'),elevation: 0,backgroundColor: appbar,),
+      appBar: AppBar(title: const Text('Profile'),elevation: 0,backgroundColor: appbar,
+        automaticallyImplyLeading: false,
+      actions: [
+        user!.emailVerified ? Text(''):IconButton(onPressed: (){
+          Navigator.pushNamed(context, 'verifyEmail');
+        }, icon: Icon(Icons.email_rounded),),
+
+      ],
+      ),
         body: SingleChildScrollView(
           child: loading ? const Center(child: CircularProgressIndicator(),) :
           Padding(

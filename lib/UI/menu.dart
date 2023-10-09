@@ -1,7 +1,5 @@
-import 'package:auth/UI/manage_users.dart';
 import 'package:auth/variable.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -26,7 +24,7 @@ class _MenuState extends State<Menu> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: GestureDetector(
-                      child: Card(
+                      child: const Card(
                       elevation: 5,
                       child: Column(
                         children: [
@@ -45,7 +43,7 @@ class _MenuState extends State<Menu> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: GestureDetector(
-                      child: Card(
+                      child: const Card(
                           elevation: 5,
                           child: Column(
                             children: [

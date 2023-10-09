@@ -4,10 +4,7 @@ import 'package:auth/Model/employee.dart';
 import 'package:auth/UI/menu.dart';
 import 'package:auth/UI/profile.dart';
 import 'package:auth/variable.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

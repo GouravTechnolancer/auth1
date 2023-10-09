@@ -18,6 +18,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:provider/provider.dart';
+import 'UI/Email verification.dart';
 import 'UI/choose_auth_method.dart';
 import 'UI/profile.dart';
 
@@ -48,8 +49,9 @@ void main() async{
             'home' : (context) => const Home(),
             'manageUsers' : (context) => const ManageUsers(),
             'warning' : (context) =>const Warning(),
-            'manageCustomer' : (context) => ManageCustomer(),
-            'addCustomers' : (context) =>AddCustomers()
+            'manageCustomer' : (context) => const ManageCustomer(),
+            'addCustomers' : (context) =>const AddCustomers(),
+            'verifyEmail' : (context) =>const VerifyEmail()
           },
         );
       },
@@ -82,12 +84,10 @@ class _SplashState extends State<Splash> {
               Navigator.pushReplacementNamed(context, 'home');
             }
           }else{
-            print('1');
             Navigator.pushNamed(context, 'chooseAuthMethod' ,arguments: {'showPasswordField':true});
           }
         });
       }else{
-        print('2');
           Navigator.pushNamed(context, 'chooseAuthMethod');
         }
     });

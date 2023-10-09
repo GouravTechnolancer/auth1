@@ -78,6 +78,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                   },
                     validator: (val){
                       if(val == null)return 'Enter Email';
+                      return null;
                     }
                 ),
               ),
@@ -100,6 +101,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                   },
                   validator: (val){
                     if(val == null)return 'Enter password';
+                    return null;
                   },
                 ),
               ),
