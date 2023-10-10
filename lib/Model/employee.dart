@@ -47,6 +47,7 @@ class UserProfile{
 
   @override
   String toString() {
-    return 'UserProfile{id: $id, name: $name, email: $email, password: $password, phoneNumber: $phoneNumber, gender: $gender, age: $age, dob: $dob, image: $image}';
+    return 'UserProfile{id: $id, name: $name, email: $email, password: $password, phoneNumber: $phoneNumber, gender: $gender, age: $age, dob: $dob, image: $image, type: $type, isVerified: $isVerified}';
   }
+
 }

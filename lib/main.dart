@@ -10,7 +10,6 @@ import 'package:auth/UI/sign_in_with_google.dart';
 import 'package:auth/UI/work_hub_logo.dart';
 import 'package:auth/UI/otp_verification.dart';
 import 'package:auth/UI/sign_in_with_phone.dart';
-import 'package:auth/UI/sign_in_with_email.dart';
 import 'package:auth/UI/register_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'UI/Email verification.dart';
 import 'UI/choose_auth_method.dart';
 import 'UI/profile.dart';
+
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,6 @@ void main() async{
             // 'myapp':(context) => MyApp(),
             'chooseAuthMethod':(context)=>const ChooseAuthMethod(),
             'registerUser': (context)=> const RegisterUser(),
-            'signInWithEmail':(context)=>const SignInWithEmail(),
             'signInWithPhone':(context)=>const SignInWithPhone(),
             'otpVerification':(context) =>const OtpVerification(),
             'workhublogo':(context)=> const WorkHubLogo(),
@@ -51,7 +51,7 @@ void main() async{
             'warning' : (context) =>const Warning(),
             'manageCustomer' : (context) => const ManageCustomer(),
             'addCustomers' : (context) =>const AddCustomers(),
-            'verifyEmail' : (context) =>const VerifyEmail()
+            'verifyEmail' : (context) =>const VerifyEmail(),
           },
         );
       },
@@ -68,31 +68,34 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
 
-  void chooseAuth()async{
-    Future.delayed(const Duration(seconds: 2),()async{
-      // Navigator.pushReplacementNamed(context, 'splash');
+  void chooseAuth()async {
+    Future.delayed(Duration(seconds: 3), () async {
       User? currentUser = FirebaseAuth.instance.currentUser;
-      if(currentUser!=null){
+      if (currentUser != null) {
         String uid = FirebaseAuth.instance.currentUser!.uid;
-        await FirebaseFirestore.instance.collection("user").doc(uid).get().then((DocumentSnapshot snapshot){
+        await FirebaseFirestore.instance.collection("user").doc(uid)
+            .get()
+            .then((DocumentSnapshot snapshot) {
           if (snapshot.exists) {
-            UserProfile employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
-            if(employee.isVerified == false) {
+            UserProfile employee = UserProfile.fromMap(
+                snapshot.id, snapshot.data() as Map<String, dynamic>);
+            print(employee);
+            if (employee.isVerified == null || !employee.isVerified!) {
               Navigator.pushNamed(context, 'warning');
-            }
-            else{
+            } else {
               Navigator.pushReplacementNamed(context, 'home');
             }
-          }else{
-            Navigator.pushNamed(context, 'chooseAuthMethod' ,arguments: {'showPasswordField':true});
+          } else {
+            Navigator.pushNamed(context, 'chooseAuthMethod',
+                arguments: {'showPasswordField': true});
           }
         });
-      }else{
-          Navigator.pushNamed(context, 'chooseAuthMethod');
-        }
+      } else {
+        Navigator.pushNamed(context, 'chooseAuthMethod');
+      }
     });
-
   }
+
   @override
   void initState() {
     super.initState();
@@ -110,9 +113,7 @@ class _SplashState extends State<Splash> {
             decoration: BoxDecoration(
               border:Border.all(width: 4,color:Colors.black54)
             ),
-            child: const Image(image: AssetImage('assets/work.png')
-                ,width: 250,height: 300,
-
+            child: const Image(image: AssetImage('assets/work.png'),width: 250,height: 300,
             ),
           ),
           Row(

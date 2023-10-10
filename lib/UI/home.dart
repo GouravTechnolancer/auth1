@@ -4,6 +4,8 @@ import 'package:auth/Model/employee.dart';
 import 'package:auth/UI/menu.dart';
 import 'package:auth/UI/profile.dart';
 import 'package:auth/variable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -21,27 +23,27 @@ class _HomeState extends State<Home> {
     const Menu(),
     const Profile()
   ];
-  // void checkVerified()async{
-  //   User?user =FirebaseAuth.instance.currentUser;
-  //   DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(user!.uid);
-  //   employeeListner = reference.snapshots().listen((DocumentSnapshot snapshot) {
-  //     if(snapshot.exists){
-  //       employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
-  //       if(employee.isVerified == false){
-  //           Future.delayed(Duration(seconds: 2),(){
-  //             Navigator.pushReplacementNamed(context, 'warning');
-  //           });
-  //       }
-  //     }
-  //   });
-  // }
+  void checkVerified()async{
+    User?user =FirebaseAuth.instance.currentUser;
+    DocumentReference reference = FirebaseFirestore.instance.collection("user").doc(user!.uid);
+    employeeListner = reference.snapshots().listen((DocumentSnapshot snapshot) {
+      if(snapshot.exists){
+        employee = UserProfile.fromMap(snapshot.id, snapshot.data() as Map<String, dynamic>);
+        if(employee.isVerified == false){
+            Future.delayed(Duration(seconds: 2),(){
+              Navigator.pushReplacementNamed(context, 'warning');
+            });
+        }
+      }
+    });
+  }
 
   int _currentIndex =0;
   @override
-  // void initState() {
+  void initState() {
   //   // TODO: implement initState
-  //   // checkVerified();
-  // }
+    checkVerified();
+  }
   @override
   Widget build(BuildContext context) {
 

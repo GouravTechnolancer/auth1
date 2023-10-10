@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:auth/Model/employee.dart';
-import 'package:auth/UI/Email%20verification.dart';
 import 'package:auth/UI/image_picker.dart';
 import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,20 +15,17 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  late Uint8List _image;
   late UserProfile employee;
   late StreamSubscription employeeListener;
   bool loading = true;
   void selectImageCamera()async{
     Uint8List img = await pickImageFrom(ImageSource.camera);
     setState(() {
-      _image = img;
     });
   }
   void selectImageGallery()async{
     Uint8List img = await pickImageFrom(ImageSource.gallery);
     setState(() {
-      _image = img;
     });
   }
 
@@ -63,12 +59,11 @@ class _ProfileState extends State<Profile> {
     Scaffold(
       appBar: AppBar(title: const Text('Profile'),elevation: 0,backgroundColor: appbar,
         automaticallyImplyLeading: false,
-      actions: [
-        user!.emailVerified ? Text(''):IconButton(onPressed: (){
-          Navigator.pushNamed(context, 'verifyEmail');
-        }, icon: Icon(Icons.email_rounded),),
-
-      ],
+      // actions: [
+      //   user.emailVerified ? const Text(''):IconButton(onPressed: (){
+      //     Navigator.pushNamed(context, 'verifyEmail');
+      //   }, icon: const Icon(Icons.email_rounded),),
+      // ],
       ),
         body: SingleChildScrollView(
           child: loading ? const Center(child: CircularProgressIndicator(),) :
@@ -76,7 +71,6 @@ class _ProfileState extends State<Profile> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                const SizedBox(height: 10,),
                 Stack(
                   children: [
                     employee.image != null ? CircleAvatar(
@@ -85,9 +79,9 @@ class _ProfileState extends State<Profile> {
                       backgroundImage: NetworkImage(employee.image!)
                     ):
                     const CircleAvatar(
-                        radius: 60,
+                        radius: 70,
                         backgroundImage: AssetImage('assets/user.png'),
-                      backgroundColor: Colors.transparent,
+                        backgroundColor: Colors.transparent,
                     ),
                     Positioned(
                         bottom: 0,
@@ -118,9 +112,36 @@ class _ProfileState extends State<Profile> {
                   children: [
                     ElevatedButton(onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0x0000000a)),
+                          backgroundColor: const Color(0xff7d7676)),
                       child: const Text('Edit Profile'),),
-                    const SizedBox(height: 15,),
+                    const SizedBox(width: 15,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        user.emailVerified == false ? ElevatedButton(onPressed: () {
+                            Navigator.pushNamed(context, 'verifyEmail');
+                        },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0x0000000a)),
+                          child: user!.emailVerified ? Row(
+                            children: [
+                              Icon(Icons.mail),
+                              Text('Verified',style: TextStyle(color: Colors.greenAccent))
+                            ],
+                          ): Row(children: [
+                            Icon(Icons.cancel,color: Colors.red,),
+                            Text('Not Verified',style: TextStyle(color: Colors.red))
+                          ],)
+                        ):ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor: Color(0xff7d7676)),onPressed: (){}, child:  Row(
+                          children: [
+                            Icon(Icons.mail),
+                            Text('Verified',style: TextStyle(color: Colors.greenAccent))
+                          ],
+                        )),
+
+                        const SizedBox(height: 15,),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 15,),
@@ -312,7 +333,33 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     const SizedBox(width: 10,),
+                    user.emailVerified == false ?
                     Expanded(
+                      flex:4,
+                      child: SizedBox(
+                        width: 180,
+                        height: 40,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.redAccent,
+                          ),
+                          child: Center(child: Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: TextFormField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                  hintText: employee.email
+                              ),
+                            ),
+                          ),),
+                        ),
+                      ),
+                    )
+                        :
+                    Expanded
+
+                      (
                       flex:4,
                       child: SizedBox(
                         width: 180,
@@ -327,7 +374,7 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               enabled: false,
                               decoration: InputDecoration(
-                                  hintText: employee.email
+                                  hintText: employee.email,
                               ),
                             ),
                           ),),
@@ -454,7 +501,7 @@ class _ProfileState extends State<Profile> {
                   Navigator.pushReplacementNamed(context, 'chooseAuthMethod');
                 },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0x0000000a)),
+                      backgroundColor: const Color(0xff7d7676)),
                   child: const Text('Logout'),),
                 Container(
                     width: double.infinity,
@@ -465,7 +512,7 @@ class _ProfileState extends State<Profile> {
                     child: GestureDetector(
                       onTap: (){
                       },
-                      child: Center(child: Text('Term & Conditions',
+                      child: const Center(child: Text('Term & Conditions',
                         style: TextStyle(color: Colors.blue),),),
                     )
                 ),

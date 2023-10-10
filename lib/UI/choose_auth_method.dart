@@ -214,7 +214,7 @@ class _ChooseAuthMethodState extends State<ChooseAuthMethod> {
                       children: [
                         Image(image: AssetImage('assets/microsoft.png') ,height: 20,),
                         SizedBox(width: 10,),
-                        Text('Sign in With Microsoft ',overflow: TextOverflow.ellipsis,)
+                        Text('Sign in With Email ',overflow: TextOverflow.ellipsis,)
                       ],)),
                   )
                 ],),
