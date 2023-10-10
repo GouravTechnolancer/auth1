@@ -12,6 +12,7 @@ class ManageCustomer extends StatefulWidget {
 class _ManageCustomerState extends State<ManageCustomer> {
   Map? data = {};
   Customer customer = Customer();
+
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context)?.settings.arguments as Map?;

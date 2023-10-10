@@ -126,15 +126,18 @@ class _ProfileState extends State<Profile> {
                           child: user!.emailVerified ? Row(
                             children: [
                               Icon(Icons.mail),
+                              SizedBox(width: 3,),
                               Text('Verified',style: TextStyle(color: Colors.greenAccent))
                             ],
                           ): Row(children: [
                             Icon(Icons.cancel,color: Colors.red,),
+                            SizedBox(width: 3,),
                             Text('Not Verified',style: TextStyle(color: Colors.red))
                           ],)
                         ):ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor: Color(0xff7d7676)),onPressed: (){}, child:  Row(
                           children: [
                             Icon(Icons.mail),
+                            SizedBox(width: 3,),
                             Text('Verified',style: TextStyle(color: Colors.greenAccent))
                           ],
                         )),

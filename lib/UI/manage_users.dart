@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:auth/Model/employee.dart';
 import 'package:auth/variable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +15,6 @@ class ManageUsers extends StatefulWidget {
 class _ManageUsersState extends State<ManageUsers> {
   late StreamSubscription employeeListener;
   List<UserProfile>? allUsers = [];
-  List<UserProfile > selectedUser =[];
   bool? checked;
   void getData(){
     // Get all data from firestore -- >Query(Firebase)
@@ -43,17 +41,8 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedUser);
     return Scaffold(
-      appBar: widget.appBar == null ? AppBar(title: const Text('Manage Users'),backgroundColor: appbar,) : AppBar(title: const Text('Selected Users'),
-        actions: [
-          selectedUser.isNotEmpty? IconButton(onPressed: (){
-            Navigator.pop(context,{'selectedUser':selectedUser});
-          }, icon: const Icon(Icons.add)) :const Text('')
-        ],
-        centerTitle: true,
-        backgroundColor: appbar,
-        elevation: 0,),
+      appBar: widget.appBar ?? AppBar(title: const Text('Manage Users'),backgroundColor: appbar,),
       body: allUsers == null ?  const Center(child: Text("No User Data Found"),) : allUsers!.isEmpty ? const Center(child: CircularProgressIndicator(),) :
       ListView.builder(
           itemCount : allUsers!.length ,
@@ -62,27 +51,15 @@ class _ManageUsersState extends State<ManageUsers> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 5,
-                child: widget.appBar == null ? ListTile(
-                  title: Center(child: Text(allUsers![index].name as String,style: const TextStyle(fontWeight: FontWeight.bold),)),
-                  subtitle: Center(child: Text(allUsers![index].phoneNumber as String,style: const TextStyle(fontWeight: FontWeight.bold),)),
-                ) : CheckboxListTile(
-                  value: selectedUser.where((element) => element.id == allUsers![index].id).toList().isNotEmpty,
-                  onChanged: (bool? value){
-                    if(value == true){
-                      setState(() {
-                        selectedUser.add(allUsers![index]);
-                      });
-                    }
-                    else{
-                      setState(() {
-                        selectedUser.removeWhere((element) => element.id == allUsers![index].id);
-                      });
-                    }
+                child: ListTile(
+                  title: Center(child: Text(allUsers![index].name.toString() ,style: const TextStyle(fontWeight: FontWeight.bold),)),
+                  subtitle: Center(child: Text(allUsers![index].phoneNumber.toString() ,style: const TextStyle(fontWeight: FontWeight.bold),)),
+                  onTap: (){
+                    Navigator.pop(context,{
+                     'user' : allUsers![index]
+                    });
                   },
-                  title: Center(child: Text(allUsers![index].name as String,style: const TextStyle(fontWeight: FontWeight.bold),)),
-                  subtitle: Center(child: Text(allUsers![index].phoneNumber as String,style: const TextStyle(fontWeight: FontWeight.bold),)),
-
-                ),
+                )
               ),
             );
       }),

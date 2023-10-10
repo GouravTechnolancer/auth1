@@ -47,6 +47,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) => isEmailVerified ? Home() :
   Scaffold(
+    backgroundColor: Colors.white,
     appBar: AppBar(
       title: Text('verify Email'),
       automaticallyImplyLeading: false,
