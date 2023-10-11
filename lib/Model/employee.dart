@@ -1,3 +1,5 @@
+import 'customer.dart';
+
 class UserProfile{
   String? id;
   String? name;
@@ -25,7 +27,7 @@ class UserProfile{
       'dob':dob,
       'image': image,
       'type': type,
-      'isVerified': isVerified
+      'isVerified': isVerified,
     };
   }
 
@@ -41,7 +43,7 @@ class UserProfile{
       dob: map["dob"],
       image: map['image'],
       type : map['type'],
-      isVerified: map['isVerified']
+      isVerified: map['isVerified'],
     );
   }
 

@@ -59,6 +59,9 @@ class _ManageUsersState extends State<ManageUsers> {
                      'user' : allUsers![index]
                     });
                   },
+                  onLongPress: (){
+
+                  },
                 )
               ),
             );
