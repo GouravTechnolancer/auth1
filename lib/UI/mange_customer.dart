@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ManageCustomer extends StatefulWidget {
-  const ManageCustomer({super.key});
+  final AppBar? appBar;
+  const ManageCustomer({super.key, this.appBar});
 
   @override
   State<ManageCustomer> createState() => _ManageCustomerState();
@@ -18,7 +19,7 @@ class _ManageCustomerState extends State<ManageCustomer> {
   List<Customer> allCustomer = [];
   late StreamSubscription employeeListner;
   Customer customer = Customer();
-  void customerdata(){
+  void customerdata()async{
     User? user = FirebaseAuth.instance.currentUser;
     DocumentReference reference = FirebaseFirestore.instance.collection("customer").doc(user!.uid);
     employeeListner = reference.snapshots().listen((DocumentSnapshot snapshot) {
@@ -36,12 +37,13 @@ class _ManageCustomerState extends State<ManageCustomer> {
   void initState() {
     // TODO: implement initState
     customerdata();
+
   }
   Widget build(BuildContext context) {
     data = ModalRoute.of(context)?.settings.arguments as Map?;
     customer = data?["customer"] ?? Customer();
     return Scaffold(
-        appBar: AppBar(title: const Text('Mange customer'),backgroundColor: appbar,),
+        appBar: widget.appBar ?? AppBar(title: const Text('ManageCustomer'),backgroundColor: appbar,),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: allCustomer.length ==null ? Text('') :
@@ -50,19 +52,45 @@ class _ManageCustomerState extends State<ManageCustomer> {
               leading: Text('${index+1}'),
               title: Column(
                 children: [
-                  Text('Name',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-                  Text(allCustomer[index].name!),
+                  Row(
+                    children: [
+                      Text('Name:-',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                      Text(allCustomer[index].name!),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('GstNo:-',style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(allCustomer[index].gstno!)
+                    ],
+                  ),
                 ],
+
               ),
-              trailing: Column(
-                children: [
-                  SizedBox(height: 10,),
-                  Text('GstNo',style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(height: 5,),
-                  Text(allCustomer[index].gstno!)
-                ],
-              ),
-              onTap: (){},
+              onLongPress: (){
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Edit'),
+                    content: Text('If u want to edit customer detail'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Save the edited item.
+                          Navigator.pushNamed(context, 'addCustomers',arguments: {
+                              'allcustomer':allCustomer
+                          });
+                        },
+                        child: Text('Edit'),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           }),
         ),

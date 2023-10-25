@@ -21,6 +21,7 @@ class _AddCustomersState extends State<AddCustomers> {
   TextEditingController userController = TextEditingController();
   Customer customer =Customer(users: []);
   final _formkey =GlobalKey<FormState>();
+  User?user =FirebaseAuth.instance.currentUser;
 
   Future showDialogBox(int index){
 
@@ -102,9 +103,11 @@ class _AddCustomersState extends State<AddCustomers> {
 
   @override
   Widget build(BuildContext context) {
+    Map?data ={};
+    data = ModalRoute.of(context)!.settings.arguments as Map;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(title: const Text('Customer details'),centerTitle: true,backgroundColor: appbar,),
+      appBar: AppBar(title: const Text('Add Customers'),centerTitle: true,backgroundColor: appbar,),
       body:Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -112,7 +115,8 @@ class _AddCustomersState extends State<AddCustomers> {
             key: _formkey,
             child: Column(
               children: [
-                TextFormField(style: const TextStyle(fontWeight: FontWeight.bold),
+                TextFormField(
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                   decoration: const InputDecoration(
                       label: Text('Name'),
                       hintText: 'Enter Name',
@@ -235,23 +239,45 @@ class _AddCustomersState extends State<AddCustomers> {
                    ),
                  ),
                ),
-                ElevatedButton(
-                    style:ElevatedButton.styleFrom(backgroundColor: Colors.grey,shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)) ),
-                    onPressed: (){
-                      User?user =FirebaseAuth.instance.currentUser;
-                      if(_formkey.currentState!.validate()){
-                        customer.users!.forEach((element) {
-                          FirebaseFirestore.instance.collection('customer').doc(user!.uid).set(customer.toJson());
-                        });
-                      }
-                    },
-                    child: Text('Save'))
+                // ElevatedButton(
+                //     style:ElevatedButton.styleFrom(backgroundColor: Colors.grey,shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)) ),
+                //     onPressed: (){
+                //       User?user =FirebaseAuth.instance.currentUser;
+                //       if(_formkey.currentState!.validate()){
+                //         customer.users!.forEach((element) {
+                //           FirebaseFirestore.instance.collection('customer').doc(user!.uid).set(customer.customerToJson());
+                //         });
+                //       }
+                //     },
+                //     child: Text('Save'))
               ],
             ),
           ),
         ),
       ),
+      bottomNavigationBar:Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+              style:ElevatedButton.styleFrom(backgroundColor: Colors.grey,shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)) ),
+              onPressed: (){
+                User?user =FirebaseAuth.instance.currentUser;
+                if(_formkey.currentState!.validate()){
+                  customer.users!.forEach((element) {
+                    FirebaseFirestore.instance.collection('customer').doc(user!.uid).set(customer.customerToJson());
+                  });
+                }
+              },
+              child: Text('Save')),
+          SizedBox(width: 25,),
+          ElevatedButton(
+              style:ElevatedButton.styleFrom(backgroundColor: Colors.grey,shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)) ),
+              onPressed: (){
 
+              },
+              child: Text('Clear'))
+        ],
+      )
     );
   }
 }

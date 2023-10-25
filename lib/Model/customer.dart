@@ -8,7 +8,7 @@ class Customer{
 
   Customer({this.name,this.gstno,this.users,this.id});
 
-  Map<String,dynamic> toJson(){
+  Map<String,dynamic> customerToJson(){
     return {
       'id':id,
       'name':name,

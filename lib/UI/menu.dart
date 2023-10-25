@@ -1,3 +1,4 @@
+import 'package:auth/UI/manage_projects.dart';
 import 'package:auth/variable.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _MenuState extends State<Menu> {
         children: [
           Row(
             children: [
-              Expanded(
+              Expanded(flex: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: GestureDetector(
@@ -30,7 +31,7 @@ class _MenuState extends State<Menu> {
                         children: [
                           SizedBox(height: 5,),
                           Image(image: AssetImage('assets/management.png'),),
-                          Text('ManageUsers')
+                          Text('Manage Users')
                         ],
                       )
                       ),
@@ -40,6 +41,7 @@ class _MenuState extends State<Menu> {
                     ),
                   )),
               Expanded(
+                flex: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: GestureDetector(
@@ -60,8 +62,50 @@ class _MenuState extends State<Menu> {
                   )),
             ],
           ),
-
-
+          Row(
+            children: [
+              Expanded(
+                flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GestureDetector(
+                      child: const Card(
+                          elevation: 5,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 5,),
+                              Image(image: AssetImage('assets/project.png')),
+                              Text('Manage Projects')
+                            ],
+                          )
+                      ),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=> ManageProjects()));
+                      },
+                    ),
+                  )),
+              Expanded(
+                flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GestureDetector(
+                      child: const Card(
+                          elevation: 5,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 5,),
+                              Image(image: AssetImage('assets/order-fulfillment.png'),),
+                              Text('Manage Payments')
+                            ],
+                          )
+                      ),
+                      onTap: (){
+                        Navigator.pushNamed(context, '');
+                      },
+                    ),
+                  )),
+            ],
+          ),
         ],
       ),
     );
